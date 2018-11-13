@@ -4,6 +4,8 @@ from scipy import integrate
 from scipy import optimize
 import pylab
 
+#dhsjahjshfhdfhsdjhgdshgjdshghdfhdihfshfdsfd
+
 k = 400
 x = np.linspace(0,k,k)
 m = 125/np.sqrt(2)
