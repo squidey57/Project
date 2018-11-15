@@ -9,6 +9,7 @@ import pylab
 k = 400
 x = np.linspace(0,k,k)
 m = 125/np.sqrt(2)
+
 l = 0.129
 j = 2
 gf = np.array([-12,6,3,1])
