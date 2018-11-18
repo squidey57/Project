@@ -6,8 +6,8 @@ from scipy import optimize
 
 
 l = 1/8
-j = 1000
-v = 256
+j = 600
+v = 246
 m = np.sqrt(2*l)*v
 A = (1/(64*np.pi**2))
 Q = 173
@@ -135,24 +135,20 @@ for i in range(0,j):
     vloopf3.append(v0[i] + v1x[i] + v1f3[i] + v2f3[i])
     vloopf4.append(v0[i] + v1x[i] + v1f4[i] + v2f4[i])
     vloopf5.append(v0[i] + v1x[i] + v1f5[i] + v2f5[i])
-Tx = 150
-Tf1 = 150
-Tf2 = 150
-Tf3 = 150
-Tf4 = 150
-Tf5 = 150
+Tx = 197.871
+
 def ix(r):
     return (r**2) * np.log(1-np.exp(-np.sqrt((r**2)+(x[i]/Tx)**2)))
 def if1(r):
-    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2)+(mf[1]*x[i]/Tf1)**2)))
+    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2)+((mf[1]*x[i])/Tx)**2)))
 def if2(r):
-    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2)+(mf[2]*x[i]/Tf2)**2)))
+    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2)+((mf[2]*x[i])/Tx)**2)))
 def if3(r):
-    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2)+(mf[1]*x[i]/Tf3)**2)))
+    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2)+((mf[3]*x[i])/Tx)**2)))
 def if4(r):
-    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2)+(mf[1]*x[i]/Tf4)**2)))
+    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2)+((mf[4]*x[i])/Tx)**2)))
 def if5(r):
-    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2)+(mf[1]*x[i]/Tf5)**2)))
+    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2)+((mf[5]*x[i])/Tx)**2)))
 intx = []
 intf1 = []
 intf2 = []
@@ -189,11 +185,11 @@ for i in range(0,j):
 
 
 v3x = dox*((Tx**4)/(2*np.pi**2))*uv3x
-nv3f1 = dof[1]*((Tf1**4)/(2*np.pi**2))*uv3f1
-nv3f2 = dof[2]*((Tf1**4)/(2*np.pi**2))*uv3f2
-nv3f3 = dof[3]*((Tf1**4)/(2*np.pi**2))*uv3f3
-nv3f4 = dof[4]*((Tf1**4)/(2*np.pi**2))*uv3f4
-nv3f5 = dof[5]*((Tf1**4)/(2*np.pi**2))*uv3f5
+nv3f1 = dof[1]*((Tx**4)/(2*np.pi**2))*uv3f1
+nv3f2 = dof[2]*((Tx**4)/(2*np.pi**2))*uv3f2
+nv3f3 = dof[3]*((Tx**4)/(2*np.pi**2))*uv3f3
+nv3f4 = dof[4]*((Tx**4)/(2*np.pi**2))*uv3f4
+nv3f5 = dof[5]*((Tx**4)/(2*np.pi**2))*uv3f5
 
 v3f1 = []
 v3f2 = []
@@ -213,37 +209,25 @@ vtotf2 = []
 vtotf3 = []
 vtotf4 = []
 vtotf5 = []
+
 for i in range(0,j):
     vtotf1.append(vloopf1[i] + v3f1[i])
     vtotf2.append(vloopf2[i] + v3f2[i])
     vtotf3.append(vloopf3[i] + v3f3[i])
-    vtotf1.append(vloopf4[i] + v3f4[i])
-    vtotf1.append(vloopf5[i] + v3f5[i])
+    vtotf4.append(vloopf4[i] + v3f4[i])
+    vtotf5.append(vloopf5[i] + v3f5[i])
 
 #pylab.plot(vloopf1, label='FUCK1')
-pylab.plot(vtotf1, label='FUCKTOT1')
-pylab.legend()
-pylab.show()
+#pylab.plot(vtotf1 - vtotf1[5], label='FUCKTOT1')
+#pylab.legend()
+#pylab.xlim(220,250)
+#pylab.ylim(-10000,10000)
+#pylab.show()
 
 
-#pylab.plot(vloopf2, label='FUCK2')
-pylab.plot(vtotf2, label='FUCKTOT2')
-pylab.legend()
-pylab.show()
+v_t = np.array([((237/v)/197.87), ((330/v)/147.85783), ((360/v)/134.65), ((385/v)/127.87)])
 
-#pylab.plot(vloopf3, label='FUCK3')
-pylab.plot(vtotf3, label='FUCKTOT3')
-pylab.legend()
-pylab.show()
-
-#pylab.plot(vloopf4, label='FUCK4')
-pylab.plot(vtotf4, label='FUCKTOT4')
-pylab.legend()
-pylab.show()
-
-#pylab.plot(vloopf5, label='FUCK5')
-pylab.plot(vtotf5, label='FUCKTOT5')
-pylab.legend()
+pylab.plot(kf[1:5], v_t)
 pylab.show()
 
 
