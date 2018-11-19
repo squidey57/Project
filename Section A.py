@@ -36,7 +36,7 @@ mxd = mx[1200:1600]
 mxe = mx[1600:2000]
 
 def v1f(x):
-    return A * dof[0] * (x ** 4) * (np.log((x ** 2 / Q ** 2) - 1.5))
+    return -(A * dof[0] * (x ** 4) * (np.log((x ** 2 / Q ** 2) - 1.5)))
 def v1ba(x):
     return A * dof[1] * ((mxa) ** 4) * (np.log((((mxa) ** 2) / (Q ** 2)) - 1.5))
 def v1bb(x):
@@ -68,5 +68,4 @@ for n in range(0,k):
         v2bc.append(A * dof[3] * ((mxc[n] * xd[i]) ** 4) * (np.log((((mxc[n] * xd[i]) ** 2) / (Q ** 2)) - 1.5)))
         v2bd.append(A * dof[4] * ((mxd[n] * xd[i]) ** 4) * (np.log((((mxd[n] * xd[i]) ** 2) / (Q ** 2)) - 1.5)))
         v2be.append(A * dof[5] * ((mxe[n] * xd[i]) ** 4) * (np.log((((mxe[n] * xd[i]) ** 2) / (Q ** 2)) - 1.5)))
-
 
