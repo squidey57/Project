@@ -5,21 +5,22 @@ from scipy import integrate
 from scipy import optimize
 
 l = 1 / 8
-j = 600
+j = 1000
 v = 246
 m = np.sqrt(2 * l) * v
 A = (1 / (64 * np.pi ** 2))
 Q = 173
 x = np.linspace(0, j, j)
+z = 0
 
 nx = 1
 kx = 1
 mx = 1
 dox = 3
 
-nf = np.array([0, 1, 2, 3, 4, 5])
-kf = np.array([0, 1, 2, 3, 4, 5])
-mf = np.array([0, 1, 2, 3, 4, 5])
+nf = np.array([ 1, 2, 3, 4, 5])
+kf = np.array([ 1, 2, 3, 4, 5])
+mf = np.array([ 1, 2, 3, 4, 5])
 dof = 4 * nf
 
 v0 = []
@@ -33,14 +34,13 @@ v1f3 = []
 v1f4 = []
 v1f5 = []
 
-for m in range(1, 6):
-    for i in range(0, j):
-        v1x.append(A * dox * ((mx * x[i]) ** 4) * (np.log(((mx * x[i]) ** 2) / Q ** 2)) - 1.5)
-        v1f1.append(-(A * dof[1] * ((mf[m] * x[i]) ** 4) * (np.log(((mf[m] * x[i]) ** 2) / Q ** 2)) - 1.5))
-        v1f2.append(-(A * dof[2] * ((mf[m] * x[i]) ** 4) * (np.log(((mf[m] * x[i]) ** 2) / Q ** 2)) - 1.5))
-        v1f3.append(-(A * dof[3] * ((mf[m] * x[i]) ** 4) * (np.log(((mf[m] * x[i]) ** 2) / Q ** 2)) - 1.5))
-        v1f4.append(-(A * dof[4] * ((mf[m] * x[i]) ** 4) * (np.log(((mf[m] * x[i]) ** 2) / Q ** 2)) - 1.5))
-        v1f5.append(-(A * dof[5] * ((mf[m] * x[i]) ** 4) * (np.log(((mf[m] * x[i]) ** 2) / Q ** 2)) - 1.5))
+for i in range(0, j):
+    v1x.append(A * dox * ((mx * x[i]) ** 4) * (np.log(((mx * x[i]) ** 2) / Q ** 2)) - 1.5)
+    v1f1.append(-(A * dof[z] * ((mf[0] * x[i]) ** 4) * (np.log(((mf[0] * x[i]) ** 2) / Q ** 2)) - 1.5))
+    v1f2.append(-(A * dof[z] * ((mf[1] * x[i]) ** 4) * (np.log(((mf[1] * x[i]) ** 2) / Q ** 2)) - 1.5))
+    v1f3.append(-(A * dof[z] * ((mf[2] * x[i]) ** 4) * (np.log(((mf[2] * x[i]) ** 2) / Q ** 2)) - 1.5))
+    v1f4.append(-(A * dof[z] * ((mf[3] * x[i]) ** 4) * (np.log(((mf[3] * x[i]) ** 2) / Q ** 2)) - 1.5))
+    v1f5.append(-(A * dof[z] * ((mf[4] * x[i]) ** 4) * (np.log(((mf[4] * x[i]) ** 2) / Q ** 2)) - 1.5))
 
 # Requires the calculation of a first and second derivative
 h = 0.001
@@ -57,14 +57,14 @@ uv2f2 = []
 uv2f3 = []
 uv2f4 = []
 uv2f5 = []
-for m in range(1, 6):
-    for i in range(0, 3):
-        uv2x.append(A * dox * ((mx * xd[i]) ** 4) * (np.log(((mx * xd[i]) ** 2) / Q ** 2)) - 1.5)
-        uv2f1.append(-(A * dof[1] * ((mf[m] * xd[i]) ** 4) * (np.log(((mf[m] * xd[i]) ** 2) / Q ** 2)) - 1.5))
-        uv2f2.append(-(A * dof[2] * ((mf[m] * xd[i]) ** 4) * (np.log(((mf[m] * xd[i]) ** 2) / Q ** 2)) - 1.5))
-        uv2f3.append(-(A * dof[3] * ((mf[m] * xd[i]) ** 4) * (np.log(((mf[m] * xd[i]) ** 2) / Q ** 2)) - 1.5))
-        uv2f4.append(-(A * dof[4] * ((mf[m] * xd[i]) ** 4) * (np.log(((mf[m] * xd[i]) ** 2) / Q ** 2)) - 1.5))
-        uv2f5.append(-(A * dof[5] * ((mf[m] * xd[i]) ** 4) * (np.log(((mf[m] * xd[i]) ** 2) / Q ** 2)) - 1.5))
+
+for i in range(0, 3):
+    uv2x.append(A * dox * ((mx * xd[i]) ** 4) * (np.log(((mx * xd[i]) ** 2) / Q ** 2)) - 1.5)
+    uv2f1.append(-(A * dof[z] * ((mf[0] * xd[i]) ** 4) * (np.log(((mf[0] * xd[i]) ** 2) / Q ** 2)) - 1.5))
+    uv2f2.append(-(A * dof[z] * ((mf[1] * xd[i]) ** 4) * (np.log(((mf[1] * xd[i]) ** 2) / Q ** 2)) - 1.5))
+    uv2f3.append(-(A * dof[z] * ((mf[2] * xd[i]) ** 4) * (np.log(((mf[2] * xd[i]) ** 2) / Q ** 2)) - 1.5))
+    uv2f4.append(-(A * dof[z] * ((mf[3] * xd[i]) ** 4) * (np.log(((mf[3] * xd[i]) ** 2) / Q ** 2)) - 1.5))
+    uv2f5.append(-(A * dof[z] * ((mf[4] * xd[i]) ** 4) * (np.log(((mf[4] * xd[i]) ** 2) / Q ** 2)) - 1.5))
 
 v2x0f1 = uv2x[0] + uv2f1[0]
 v2xpf1 = uv2x[1] + uv2f1[1]
@@ -131,7 +131,7 @@ for i in range(0, j):
     vloopf3.append(v0[i] + v1x[i] + v1f3[i] + v2f3[i])
     vloopf4.append(v0[i] + v1x[i] + v1f4[i] + v2f4[i])
     vloopf5.append(v0[i] + v1x[i] + v1f5[i] + v2f5[i])
-Tx = 140
+Tx = 225
 
 
 def ix(r):
@@ -139,23 +139,23 @@ def ix(r):
 
 
 def if1(r):
-    return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf[1] * x[i]) / Tx) ** 2)))
+    return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf[0] * x[i]) / Tx) ** 2)))
 
 
 def if2(r):
-    return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf[2] * x[i]) / Tx) ** 2)))
+    return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf[1] * x[i]) / Tx) ** 2)))
 
 
 def if3(r):
-    return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf[3] * x[i]) / Tx) ** 2)))
+    return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf[2] * x[i]) / Tx) ** 2)))
 
 
 def if4(r):
-    return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf[4] * x[i]) / Tx) ** 2)))
+    return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf[3] * x[i]) / Tx) ** 2)))
 
 
 def if5(r):
-    return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf[5] * x[i]) / Tx) ** 2)))
+    return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf[4] * x[i]) / Tx) ** 2)))
 
 
 intx = []
@@ -193,11 +193,11 @@ for i in range(0, j):
     uv3f5[i], ef5[i] = intf5[i]
 
 v3x = dox * ((Tx ** 4) / (2 * np.pi ** 2)) * uv3x
-nv3f1 = -dof[1] * ((Tx ** 4) / (2 * np.pi ** 2)) * uv3f1
-nv3f2 = -dof[2] * ((Tx ** 4) / (2 * np.pi ** 2)) * uv3f2
-nv3f3 = -dof[3] * ((Tx ** 4) / (2 * np.pi ** 2)) * uv3f3
-nv3f4 = -dof[4] * ((Tx ** 4) / (2 * np.pi ** 2)) * uv3f4
-nv3f5 = -dof[5] * ((Tx ** 4) / (2 * np.pi ** 2)) * uv3f5
+nv3f1 = -dof[z] * ((Tx ** 4) / (2 * np.pi ** 2)) * uv3f1
+nv3f2 = -dof[z] * ((Tx ** 4) / (2 * np.pi ** 2)) * uv3f2
+nv3f3 = -dof[z] * ((Tx ** 4) / (2 * np.pi ** 2)) * uv3f3
+nv3f4 = -dof[z] * ((Tx ** 4) / (2 * np.pi ** 2)) * uv3f4
+nv3f5 = -dof[z] * ((Tx ** 4) / (2 * np.pi ** 2)) * uv3f5
 
 v3f1 = []
 v3f2 = []
@@ -224,14 +224,15 @@ for i in range(0, j):
     vtotf3.append(vloopf3[i] + v3f3[i])
     vtotf4.append(vloopf4[i] + v3f4[i])
     vtotf5.append(vloopf5[i] + v3f5[i])
-print(min(vtotf5[30:400]-vtotf5[1]))
+print(min(vtotf2[30:400]-vtotf2[1]))
 # pylab.plot(vloopf1 )
-#pylab.plot(vtotf5 - vtotf5[1])
-#pylab.xlim(375, 390)
+#pylab.plot(vtotf1 - vtotf1[1], label='Kf = 1')
+pylab.plot(vtotf2 - vtotf2[1], label='Kf = 2')
+#pylab.plot(vtotf3 - vtotf3[1], label='Kf = 3')
+#pylab.plot(vtotf4 - vtotf4[1], label='Kf = 4')
+#pylab.plot(vtotf5 - vtotf5[1], label='Kf = 5')
+pylab.legend()
+#pylab.xlim(195, 200)
 #pylab.ylim(-1, 1)
-#pylab.show()
 
-
-mn = np.array([(199/212.790845), (323/152.91015), (358/138.5754011), (383/131.5005215)])
-pylab.plot(kf[1:5], mn)
 pylab.show()
