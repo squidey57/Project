@@ -7,24 +7,22 @@ import pylab
 A = (1/(64*np.pi**2))
 k = 400
 v = 256
-x = np.linspace(0,k,k)
+x = np.linspace(0, k, k)
 kf = 1
 nf = kf
 l = 1/8
 ms = (np.sqrt(2*l)*v)
-nx = np.array([1,2,3,4,5])
-kx = np.array([1,2,3,4,5])
-dof = np.array([4,3,6,9,12,15])
+nx = np.array([1, 2, 3, 4, 5])
+kx = np.array([1, 2, 3, 4, 5])
+dof = np.array([4, 3, 6, 9, 12, 15])
 Q = 173
 
-
-
-#V0 Calculations:
+# V0 Calculations:
 v0 = []
-for i in range(0,k):
+for i in range(0, k):
     v0.append(-(((ms**2)/2)*x[i]**2)+((l/4)*x[i]**4))
 
-#V1 Calculations:
+# V1 Calculations:
 
 v1f = []
 v1ba = []
@@ -33,7 +31,7 @@ v1bc = []
 v1bd = []
 v1be = []
 
-for i in range(0,k):
+for i in range(0, k):
     v1f.append(-(A * dof[0] * (x[i] ** 4) * ((np.log((x[i] ** 2 / Q ** 2))) - 1.5)))
     v1ba.append(A * dof[1] * (x[i] ** 4) * (np.log(((x[i]) ** 2) / (Q ** 2)) - 1.5))
     v1bb.append(A * dof[1] * ((2*x[i])**4) * ((np.log(((2*x[i])**2 )/ (Q ** 2))) - 1.5))
@@ -44,7 +42,7 @@ for i in range(0,k):
 
 #V2 calculations:
 h = 0.001
-xd = np.array([256,256+h,256-h])
+xd = np.array([256, 256+h, 256-h])
 
 
 v2f = []
@@ -53,13 +51,13 @@ v2bb = []
 v2bc = []
 v2bd = []
 v2be = []
-for i in range(0,3):
-    v2f.append(A * -(dof[0] * (( xd[i]) ** 4) * (np.log((( xd[i]) ** 2 / Q ** 2) - 1.5))))
-    v2ba.append(A * dof[1] * (( xd[i]) ** 4) * (np.log(((( xd[i]) ** 2) / (Q ** 2)) - 1.5)))
-    v2bb.append(A * dof[2] * ((2 * xd[i]) ** 4) * (np.log((((2* xd[i]) ** 2) / (Q ** 2)) - 1.5)))
-    v2bc.append(A * dof[3] * ((3 * xd[i]) ** 4) * (np.log((((3* xd[i]) ** 2) / (Q ** 2)) - 1.5)))
-    v2bd.append(A * dof[4] * ((4 * xd[i]) ** 4) * (np.log((((4*xd[i]) ** 2) / (Q ** 2)) - 1.5)))
-    v2be.append(A * dof[5] * ((5 * xd[i]) ** 4) * (np.log((((5* xd[i]) ** 2) / (Q ** 2)) - 1.5)))
+for i in range(0, 3):
+    v2f.append(A * -(dof[0] * ((xd[i]) ** 4) * (np.log(((xd[i]) ** 2 / Q ** 2) - 1.5))))
+    v2ba.append(A*dof[1] * ((xd[i]) ** 4) * (np.log((((xd[i]) ** 2) / (Q ** 2)) - 1.5)))
+    v2bb.append(A*dof[1] * ((2*xd[i]) ** 4) * (np.log((((2*xd[i]) ** 2) / (Q ** 2)) - 1.5)))
+    v2bc.append(A*dof[1] * ((3*xd[i]) ** 4) * (np.log((((3*xd[i]) ** 2) / (Q ** 2)) - 1.5)))
+    v2bd.append(A*dof[1] * ((4*xd[i]) ** 4) * (np.log((((4*xd[i]) ** 2) / (Q ** 2)) - 1.5)))
+    v2be.append(A*dof[1] * ((5*xd[i]) ** 4) * (np.log((((5*xd[i]) ** 2) / (Q ** 2)) - 1.5)))
 #For boson A:
 v2x0ba = v2ba[0]+v2f[0]
 v2xpba = v2ba[1]+v2f[1]
@@ -128,7 +126,7 @@ v2bc1 = []
 v2bd1 = []
 v2be1 = []
 
-for i in range(0,k):
+for i in range(0, k):
     v2ba1.append((((dm2a ** 2) / 2) * (x[i] ** 2)) + (((dlba ** 4) / 4) * (x[i] ** 4)))
     v2bb1.append((((dm2b ** 2) / 2) * (x[i] ** 2)) + (((dlbb ** 4) / 4) * (x[i] ** 4)))
     v2bc1.append((((dm2c ** 2) / 2) * (x[i] ** 2)) + (((dlbc ** 4) / 4) * (x[i] ** 4)))
@@ -143,16 +141,15 @@ vloopd = []
 vloope = []
 
 
-for i in range(0,k):
+for i in range(0, k):
     vloopa.append(v0[i] + v1ba[i] + v2ba1[i] + v1f[i])
     vloopb.append(v0[i] + v1bb[i] + v2bb1[i] + v1f[i])
     vloopc.append(v0[i] + v1bc[i] + v2bc1[i] + v1f[i])
     vloopd.append(v0[i] + v1bd[i] + v2bd1[i] + v1f[i])
     vloope.append(v0[i] + v1be[i] + v2be1[i] + v1f[i])
 
-##########################################################################
-T = 250
-#Ta = 249.809 , Va=124
+T = 0
+#Ta = 95.1062499225 , Va=86
 
 def ifer(r):
     return (r**2)*np.log(1+np.exp(-np.sqrt((r**2)+((((x[i]))**2)/T**2))))
@@ -176,9 +173,9 @@ intibd = []
 intibe = []
 
 
-for i in range(0,k):
-    intifer.append(sci.integrate.quad(ifer,0,np.inf))
-    intiba.append(sci.integrate.quad(iba,0,np.inf))
+for i in range(0, k):
+    intifer.append(sci.integrate.quad(ifer, 0, np.inf))
+    intiba.append(sci.integrate.quad(iba, 0, np.inf))
     intibb.append(sci.integrate.quad(ibb, 0, np.inf))
     intibc.append(sci.integrate.quad(ibc, 0, np.inf))
     intibd.append(sci.integrate.quad(ibd, 0, np.inf))
@@ -199,7 +196,7 @@ ed = np.zeros(k)
 ee = np.zeros(k)
 
 
-for i in range(0,k):
+for i in range(0, k):
     uv3f[i], ef[i] = intifer[i]
     uv3a[i], ea[i] = intiba[i]
     uv3b[i], eb[i] = intibb[i]
@@ -207,7 +204,7 @@ for i in range(0,k):
     uv3d[i], ed[i] = intibd[i]
     uv3e[i], ee[i] = intibe[i]
 
-v3f = dof[0]*((T**4)/(2*np.pi**2))*uv3f
+v3f = -dof[0]*((T**4)/(2*np.pi**2))*uv3f
 v3a = dof[1]*((T**4)/(2*np.pi**2))*uv3a
 v3b = dof[1]*((T**4)/(2*np.pi**2))*uv3b
 v3c = dof[1]*((T**4)/(2*np.pi**2))*uv3c
@@ -242,10 +239,8 @@ for i in range(0,k):
     vtotd.append(v3d1[i] + vloopd[i])
     vtote.append(v3e1[i] + vloope[i])
 
-print(min(vtotc[5:k]-vtotc[1]))
-pylab.plot(vtotc - vtotc[1])
+print(min(vtotb[5:k]-vtotb[1]))
+pylab.plot(vtotb - vtotb[1])
 #pylab.ylim(1,-1)
 #pylab.xlim(120,128)
 pylab.show()
-
-
