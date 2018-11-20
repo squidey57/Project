@@ -152,18 +152,17 @@ T = 0
 #Ta = 95.1062499225 , Va=86
 
 def ifer(r):
-    return (r**2)*np.log(1+np.exp(-np.sqrt((r**2)+((((x[i]))**2)/T**2))))
+    return (r**2)*np.log(1+np.exp(-np.sqrt((r**2)+((x[i])/T)**2)))
 def iba(r):
-    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((((x[i])))**2)/T**2)))
+    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((x[i])**2)/T**2)))
 def ibb(r):
-    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+(((2*(x[i])))**2)/T**2)))
+    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((2*(x[i]))**2)/T**2)))
 def ibc(r):
-    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+(((3*(x[i])))**2)/T**2)))
+    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((3*(x[i]))**2)/T**2)))
 def ibd(r):
-    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+(((4*(x[i])))**2)/T**2)))
+    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((4*(x[i]))**2)/T**2)))
 def ibe(r):
-    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+(((5*(x[i])))**2)/T**2)))
-
+    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((5*(x[i]))**2)/T**2)))
 
 intifer = []
 intiba = []
@@ -172,7 +171,6 @@ intibc = []
 intibd = []
 intibe = []
 
-
 for i in range(0, k):
     intifer.append(sci.integrate.quad(ifer, 0, np.inf))
     intiba.append(sci.integrate.quad(iba, 0, np.inf))
@@ -180,6 +178,8 @@ for i in range(0, k):
     intibc.append(sci.integrate.quad(ibc, 0, np.inf))
     intibd.append(sci.integrate.quad(ibd, 0, np.inf))
     intibe.append(sci.integrate.quad(ibe, 0, np.inf))
+
+print(intiba)
 
 uv3f = np.zeros(k)
 uv3a = np.zeros(k)
@@ -203,6 +203,7 @@ for i in range(0, k):
     uv3c[i], ec[i] = intibc[i]
     uv3d[i], ed[i] = intibd[i]
     uv3e[i], ee[i] = intibe[i]
+
 
 v3f = -dof[0]*((T**4)/(2*np.pi**2))*uv3f
 v3a = dof[1]*((T**4)/(2*np.pi**2))*uv3a
@@ -239,7 +240,7 @@ for i in range(0,k):
     vtotd.append(v3d1[i] + vloopd[i])
     vtote.append(v3e1[i] + vloope[i])
 
-print(min(vtotb[5:k]-vtotb[1]))
+print(min(vtotb[2:k]-vtotb[1]))
 pylab.plot(vtotb - vtotb[1])
 #pylab.ylim(1,-1)
 #pylab.xlim(120,128)
