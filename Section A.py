@@ -151,7 +151,7 @@ for i in range(0,k):
     vloope.append(v0[i] + v1be[i] + v2be1[i] + v1f[i])
 
 ##########################################################################
-T = 249.809
+T = 250
 #Ta = 249.809 , Va=124
 
 def ifer(r):
@@ -209,10 +209,10 @@ for i in range(0,k):
 
 v3f = dof[0]*((T**4)/(2*np.pi**2))*uv3f
 v3a = dof[1]*((T**4)/(2*np.pi**2))*uv3a
-v3b = dof[2]*((T**4)/(2*np.pi**2))*uv3b
-v3c = dof[3]*((T**4)/(2*np.pi**2))*uv3c
-v3d = dof[3]*((T**4)/(2*np.pi**2))*uv3d
-v3e = dof[3]*((T**4)/(2*np.pi**2))*uv3e
+v3b = dof[1]*((T**4)/(2*np.pi**2))*uv3b
+v3c = dof[1]*((T**4)/(2*np.pi**2))*uv3c
+v3d = dof[1]*((T**4)/(2*np.pi**2))*uv3d
+v3e = dof[1]*((T**4)/(2*np.pi**2))*uv3e
 
 
 v3a1 = []
@@ -241,10 +241,11 @@ for i in range(0,k):
     vtotc.append(v3c1[i] + vloopc[i])
     vtotd.append(v3d1[i] + vloopd[i])
     vtote.append(v3e1[i] + vloope[i])
-print(min(vtota[30:k]-vtota[1]))
-pylab.plot(vtota - vtota[1])
-pylab.ylim(1,-1)
-pylab.xlim(120,128)
+
+print(min(vtotc[5:k]-vtotc[1]))
+pylab.plot(vtotc - vtotc[1])
+#pylab.ylim(1,-1)
+#pylab.xlim(120,128)
 pylab.show()
 
 
