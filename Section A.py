@@ -58,6 +58,7 @@ for i in range(0, 3):
     v2bc.append(A*dof[1] * ((3*xd[i]) ** 4) * (np.log((((3*xd[i]) ** 2) / (Q ** 2)) - 1.5)))
     v2bd.append(A*dof[1] * ((4*xd[i]) ** 4) * (np.log((((4*xd[i]) ** 2) / (Q ** 2)) - 1.5)))
     v2be.append(A*dof[1] * ((5*xd[i]) ** 4) * (np.log((((5*xd[i]) ** 2) / (Q ** 2)) - 1.5)))
+
 #For boson A:
 v2x0ba = v2ba[0]+v2f[0]
 v2xpba = v2ba[1]+v2f[1]
@@ -148,13 +149,13 @@ for i in range(0, k):
     vloopd.append(v0[i] + v1bd[i] + v2bd1[i] + v1f[i])
     vloope.append(v0[i] + v1be[i] + v2be1[i] + v1f[i])
 
-T = 0
-#Ta = 95.1062499225 , Va=86
+T = 95.116221962425
+#Ta = 95.116221962425 , Va=86
 
 def ifer(r):
     return (r**2)*np.log(1+np.exp(-np.sqrt((r**2)+((x[i])/T)**2)))
 def iba(r):
-    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((x[i])**2)/T**2)))
+    return (r ** 2) * np.log(1 - np.exp(-np.sqrt((r ** 2) + ((x[i] / T) ** 2))))
 def ibb(r):
     return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((2*(x[i]))**2)/T**2)))
 def ibc(r):
@@ -163,6 +164,7 @@ def ibd(r):
     return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((4*(x[i]))**2)/T**2)))
 def ibe(r):
     return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((5*(x[i]))**2)/T**2)))
+
 
 intifer = []
 intiba = []
@@ -178,8 +180,6 @@ for i in range(0, k):
     intibc.append(sci.integrate.quad(ibc, 0, np.inf))
     intibd.append(sci.integrate.quad(ibd, 0, np.inf))
     intibe.append(sci.integrate.quad(ibe, 0, np.inf))
-
-print(intiba)
 
 uv3f = np.zeros(k)
 uv3a = np.zeros(k)
@@ -240,8 +240,8 @@ for i in range(0,k):
     vtotd.append(v3d1[i] + vloopd[i])
     vtote.append(v3e1[i] + vloope[i])
 
-print(min(vtotb[2:k]-vtotb[1]))
-pylab.plot(vtotb - vtotb[1])
-#pylab.ylim(1,-1)
-#pylab.xlim(120,128)
+print(min(vtota[5:k]-vtota[3]))
+pylab.plot(vtota - vtota[3])
+pylab.ylim(-1,1)
+#pylab.xlim(80,128)
 pylab.show()
