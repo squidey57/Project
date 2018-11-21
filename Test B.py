@@ -5,14 +5,15 @@ from scipy import integrate
 from scipy import optimize
 
 l = 1 / 8
-j = 1000
-v = 246
-m = np.sqrt(2 * l) * v
+j = 400
+
+
+m = np.sqrt(2 * l)
 A = (1 / (64 * np.pi ** 2))
 Q = 173
-x = np.linspace(0, j, j)
-z = 0
-d = 1
+x = np.linspace(0, 2, j)
+z = 1
+d = 0
 nx = 1
 kx = 1
 mx = 1
@@ -74,7 +75,7 @@ vloopfd = []
 for i in range(0, j):
     vloopfd.append(v0[i] + v1x[i] + v1fd[i] + v2fd[i])
 
-Tx = 225
+Tx = 1
 
 
 def ix(r):
@@ -93,7 +94,7 @@ for i in range(0, j):
     intx.append(sci.integrate.quad(ix, 0, np.inf))
     intfd.append(sci.integrate.quad(if1, 0, np.inf))
 
-
+print(intx)
 uv3x = np.zeros(j)
 uv3fd = np.zeros(j)
 
@@ -123,9 +124,17 @@ vtotfd = []
 for i in range(0, j):
     vtotfd.append(vloopfd[i] + v3f1[i])
 
-print(min(vtotfd[30:400]-vtotfd[1]))
-pylab.plot(vtotfd - vtotfd[1])
-#pylab.ylim(0,150)
-#pylab.xlim(195,205)
-pylab.show()
+print(max(vtotfd[30:j]-vtotfd[1]))
+#pylab.plot(vtotfd - vtotfd[1])
+#pylab.ylim(-10,10)
+#pylab.xlim(300,320)
+#pylab.show()
 
+pylab.plot(v0)
+pylab.show()
+#c1 = np.array([(199/212.79), (340/233.3873872), (317/330), (314/491.85), (313/712.3)])#
+#c2 = np.array([(182/184.5), (320/224.23), (313/351.15235), (313/551.6569388), (314/818.4707081)])
+#pylab.plot(kf[0:5],c1,  label = 'Nf = 1')
+#pylab.legend()
+#pylab.savefig('Nf = 1')
+#pylab.show()
