@@ -130,7 +130,7 @@ for i in range(0,k):
     v3.append(v3t[i]+v3w[i]+v3z[i]+v3x[i])
 
 vtot = vnloop(x)+v3
-
+print(v1t(x))
 #pylab.plot(vnloop(x), label='ggyugu')
 pylab.plot(vtot - vtot[1], label='j=2')
 pylab.legend()
