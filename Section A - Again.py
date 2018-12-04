@@ -4,17 +4,17 @@ import pylab
 from scipy import optimize
 from scipy import integrate
 
-k = 2000
-l = 1 / 8
-m = np.sqrt(1 / 8)
-x = np.linspace(0, 10, k)
-t = np.ones(k)
-mx = 2
-dox = 3
-A = (1 / (64 * np.pi ** 2))
+k = 600
+lam = 1/8
+ms = np.sqrt(lam)
+x = np.linspace(0, 2, k)
 Q = 1
+T = 0.6
+A = 1/(64*np.pi**2)
+mx = 1
+dofb = 3
 mf = 1
-dof = 4
+doff = 4
 h = 0.01
 xd = np.array([1, (1 + h), (1 - h)])
 
@@ -22,8 +22,8 @@ uv2b = []
 uv2f = []
 
 for i in range(0, 3):
-    uv2b.append(A * dox * ((mx * xd[i]) ** 4) * (np.log(((mx * xd[i]) ** 2) / Q ** 2)) - 1.5)
-    uv2f.append(-A * dof * ((mf * xd[i]) ** 4) * (np.log(((mf * xd[i] ** 2) / Q ** 2)) - 1.5))
+    uv2b.append(A * dofb * ((mx * xd[i]) ** 4) * (np.log(((mx * xd[i]) ** 2) / Q ** 2) - 1.5))
+    uv2f.append(A * -doff * ((mf * xd[i]) ** 4) * (np.log(((mf * xd[i]) ** 2) / Q ** 2) - 1.5))
 
 v2x0b1 = uv2b[0]
 v2xpb1 = uv2b[1]
@@ -41,16 +41,25 @@ d2fv1f1 = (v2xpf1 - (2 * v2x0f1) + v2xnf1) / (h ** 2)
 dlf = 0.5 * (dfv1f1 - d2fv1f1)
 dm2f = 0.5 * (1 / xd[0]) * ((d2fv1f1 * xd[0]) - (3 * dfv1f1))
 
-def vnloop(x):
-    return (-((m ** 2) / 2) * x ** 2) + ((l / 4) * x ** 4) + \
-           (A * dox * ((mx * x) ** 4) * (np.log(((mx * x ** 2) / Q ** 2)) - 1.5)) + \
-           (-A * dof * ((mf * x) ** 4) * (np.log(((mf * x ** 2) / Q ** 2)) - 1.5)) + \
-           (((dm2b / 2) * x ** 2) + ((dlb / 4) * x ** 4)) + (((dm2f / 2) * x ** 2) + ((dlf / 4) * x ** 4))
+
 def v0(x):
-    return (-((m ** 2) / 2) * x ** 2) + ((l / 4) * x ** 4)
-pylab.plot(v0(x))
-pylab.plot(vnloop(x))
-T = 1
+    return (-((ms**2)/2)*x**2) + ((lam/4)*(x**4))
+
+
+def vbloop(x):
+    return(((-((ms**2)/2)*x**2) + ((lam/4)*(x**4))) + (A*(dofb*((mx*x)**4))*(np.log(((mx*x)**2)/(Q**2))-1.5)) \
+           + (((dm2b / 2) * x ** 2) + ((dlb / 4) * x ** 4)))
+
+
+def vfloop(x):
+    return ((-((ms**2)/2)*x**2) + ((lam/4)*(x**4))) + (-A*((doff*((mf*x)**4))*(np.log(((mf*x)**2)/(Q**2))-1.5)))\
+           + (((dm2f / 2) * x ** 2) + ((dlf / 4) * x ** 4))
+
+
+def vtloop(x):
+    return vbloop(x) + vfloop(x) - v0(x)
+
+
 def intb(r):
     return (r**2) * np.log(1-np.exp(-np.sqrt((r**2) + ((mx*x[i])/T)**2)))
 
@@ -71,17 +80,20 @@ for i in range(0, k):
     i3f.append(sci.integrate.quad(intf,0,np.inf))
     uv3b[i], eb[i] = i3b[i]
     uv3f[i], ef[i] = i3f[i]
-    v3b.append(dox * ((T**4)/(2*np.pi**2)) * uv3b[i])
-    v3f.append(-dof * ((T**4)/(2*np.pi**2)) * uv3f[i])
+    v3b.append(dofb * ((T**4)/(2*np.pi**2)) * uv3b[i])
+    v3f.append(-doff * ((T**4)/(2*np.pi**2)) * uv3f[i])
     v3.append(v3b[i] + v3f[i])
 
-Vtot = vnloop(x) + v3
-Vtot1 = vnloop(x[1]) + v3[1]
+B = vtloop(x[1]) + v3[1]
 
-#print(np.min(Vtot1))
-#pylab.plot(vnloop(x) , label = 'VnLoop')
-#pylab.plot(Vtot - Vtot1, label = 'VTotal')
-pylab.ylim(-50,400)
-#pylab.xlim(0,200)
-#pylab.legend()
+
+def vtotal(x):
+    return vtloop(x) + v3 - B
+
+#pylab.plot(vtloop(x), label='vtloop')
+#pylab.plot(vbloop(x), label='vbloop')
+#pylab.plot(vfloop(x), label='vfloop')
+pylab.plot(v0(x), label='v0')
+pylab.plot(vtotal(x), label='Vtotal')
+pylab.legend()
 pylab.show()
