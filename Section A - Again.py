@@ -4,12 +4,12 @@ import pylab
 from scipy import optimize
 from scipy import integrate
 
-k = 600
+k = 400
 lam = 1/8
 ms = np.sqrt(lam)
 x = np.linspace(0, 2, k)
 Q = 1
-T = 0.6
+T = 0.01
 A = 1/(64*np.pi**2)
 mx = 1
 dofb = 3
@@ -93,7 +93,7 @@ def vtotal(x):
 #pylab.plot(vtloop(x), label='vtloop')
 #pylab.plot(vbloop(x), label='vbloop')
 #pylab.plot(vfloop(x), label='vfloop')
-pylab.plot(v0(x), label='v0')
+#pylab.plot(v0(x), label='v0')
 pylab.plot(vtotal(x), label='Vtotal')
 pylab.legend()
 pylab.show()
