@@ -4,10 +4,10 @@ import scipy as sci
 from scipy import integrate
 
 
-k = 400
+k = 600
 lam = 1/8
 ms = np.sqrt(lam)
-x = np.linspace(0, 2, k)
+x = np.linspace(0, 1, k)
 Q = 1
 T = 0.6175
 A = 1/(64*np.pi**2)
@@ -96,14 +96,14 @@ def vtotal(x):
 def intvtot(x):
     return np.sqrt(2*vtotal(x))
 
-#print(np.trapz(intvtot(x)[1:110], dx=500))
+print(np.trapz(intvtot(x)[1:334], dx=500))
 
 #pl.plot(intvtot(x))
 #pl.xlim(1.0, 110)
 #pl.ylim(0.0, 0.03)
 #pl.show()
 
-sigma = 870.237303132
+sigma = np.trapz(intvtot(x)[1:334], dx=500)
 dv = 0.00157
 
 
@@ -111,6 +111,9 @@ def s(t):
     return -(np.pi * (4/3) * t**3 * dv) + (4 * np.pi * sigma * t**2)
 
 
-t = np.linspace(0, 2000000)
+t = np.linspace(0, 5000000)
 pl.plot(s(t))
 pl.show()
+
+
+#print(intvtot(x)[334])
