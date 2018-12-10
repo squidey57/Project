@@ -63,8 +63,10 @@ def vtloop(x):
 def intb(r):
     return (r**2) * np.log(1-np.exp(-np.sqrt((r**2) + ((mx*x[i])/T)**2)))
 
+
 def intf(r):
     return (r**2) * np.log(1+np.exp(-np.sqrt((r**2) + ((mf*x[i])/T)**2)))
+
 
 i3b = []
 i3f = []
