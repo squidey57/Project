@@ -3,13 +3,14 @@ import scipy as sci
 import pylab
 from scipy import optimize
 from scipy import integrate
+from scipy.integrate import odeint
 
 k = 400
 lam = 1/8
 ms = np.sqrt(lam)
 x = np.linspace(0, 2, k)
 Q = 1
-T = 0.5975
+T = 0.59
 A = 1/(64*np.pi**2)
 mx = 1
 dofb = 3
@@ -92,10 +93,31 @@ B = vtloop(x[1]) + v3[1]
 def vtotal(x):
     return vtloop(x) + v3 - B
 
+#DE for boson and fermion case seperately
+cb = 13.94*16
+cf = 13.94
+D = -ms**2 + dm2b**2 + (1/12 * T**2 * mx**2 - 1/(6*np.pi)*T*mx) +1/24 * T**2 * mf**2
+
+
+def dU_dr(U, r):
+    return [U[1], (-2/(r+0.001))*(U[1]) + D*U[0] +
+            U[0]**3 * (lam + dlb + (mx**4/(32*np.pi**2))*(2*np.log(((mx**2*U[0]**2)/(cb*T**2)))+1)
+                       + ((A*dofb*mx**4)*(4*np.log((mx**2 * U[0]**2)/(Q**2))-4)) +
+                       (mf**4/32*np.pi**2)*2*np.log(((mf*U[0])**2)/(cf*T**2))+1)]
+
+
+U0 = [0.0000001, 0.00000001]
+xs = np.linspace(0, 50, 200)
+Us = odeint(dU_dr, U0, xs)
+ys = Us[:,0]
+
+print(ys)
+pylab.plot(xs,ys)
+pylab.show()
 #pylab.plot(vtloop(x), label='vtloop')
 #pylab.plot(vbloop(x), label='vbloop')
 #pylab.plot(vfloop(x), label='vfloop')
-pylab.plot(v0(x), label='v0')
-pylab.plot(vtotal(x), label='Vtotal')
-pylab.legend()
-pylab.show()
+#pylab.plot(v0(x), label='v0')
+#pylab.plot(vtotal(x), label='Vtotal')
+#pylab.legend()
+#pylab.show()
