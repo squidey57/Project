@@ -128,20 +128,34 @@ def dU_dr(U, r):
     return [U[1], (-2/(r+0.001))*(U[1]) + arfa[0]*np.sin(U[0]) + arfa[1]*U[0]**3 + arfa[2]*U[0]**2 + arfa[3]*U[0] + arfa[4]]
 
 
-U0 = [0.5, 0.00001]
-xs = np.linspace(0, 50, 200)
+U0 = [0.51, 0.0001]
+xs = np.linspace(0, 50, k)
 Us = odeint(dU_dr, U0, xs)
 ys = Us[:,0]
 
 
 
+def rad(r):
+    return np.pi * 4 * r**2
 
+
+intrad = sci.integrate.quad(rad, 0, np.inf)
+
+
+s3 = []
+s32 = []
+
+for i in range(0, k):
+    s3.append(0.5*ys[i]**2 + vtotal(x)[i])
+    s32.append(-intrad[0]*s3[i]/T)
+
+pylab.plot(x, s32)
 
 #print(ys)
-pylab.plot(xs, ys)
-pylab.xlabel('r')
-pylab.ylabel('Phi')
-pylab.show()
+#pylab.plot(xs, ys)
+#pylab.xlabel('r')
+#pylab.ylabel('Phi')
+#pylab.show()
 
 #pylab.plot(vtloop(x), label='vtloop')
 #pylab.plot(vbloop(x), label='vbloop')
@@ -149,4 +163,4 @@ pylab.show()
 #pylab.plot(v0(x), label='v0')
 #pylab.plot(vtotal(x), label='Vtotal')
 #pylab.legend()
-#pylab.show()
+pylab.show()
