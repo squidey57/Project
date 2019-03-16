@@ -6,11 +6,11 @@ from scipy import integrate
 from scipy.integrate import odeint
 
 k = 1001
-lam = 1/8
-ms = np.sqrt(lam)
-x = np.linspace(0, 1, k)
-Q = 1
-T = 0.61575
+lam = 0.129
+ms = 7813**1/2
+x = np.linspace(0, 100, k)
+Q = 173
+T = 1
 A = 1/(64*np.pi**2)
 mx = 1
 dofb = 3
@@ -93,11 +93,6 @@ B = vtloop(x[1]) + v3[1]
 def vtotal(x):
     return vtloop(x) + v3 - B
 
-
-#int1 = sci.integrate.quad(vtotal,0, 0.56)
-#print(int1)
-
-
 #Differentiating the LHS
 
 
@@ -109,9 +104,9 @@ for i in range(2, k-1):
 
 #Fitting to a function
 
-#make in order
-def arf(x, a, b, c, d, f, g):
-    return(a*np.sin(x+g) + b*x**3 + c*x**2 + d*x + f)
+
+def arf(x, a, b, c, d, f):
+    return(a*np.sin(x) + b*x**3 + c*x**2 + d*x + f)
 
 
 arfa, covarfa = sci.optimize.curve_fit(arf, x[1:k-2], dvtotal)
@@ -121,20 +116,20 @@ arfa, covarfa = sci.optimize.curve_fit(arf, x[1:k-2], dvtotal)
 #pylab.show()
 
 
-#Solving DE
+#Attempt at solving DE
 
 
 cb = 13.94*16
 cf = 13.94
-D = -ms**2 + dm2b**2 + (1/12 * T**2 * mx**2 - 1/(6*np.pi)*T*mx) + 1/24 * T**2 * mf**2
+D = -ms**2 + dm2b**2 + (1/12 * T**2 * mx**2 - 1/(6*np.pi)*T*mx) +1/24 * T**2 * mf**2
 
 
 def dU_dr(U, r):
-    return [U[1], (-2/(r+0.001))*(U[1]) + arfa[0]*np.sin(U[0]+arfa[5]) + arfa[1]*U[0]**3 + arfa[2]*U[0]**2 + arfa[3]*U[0] + arfa[4]]
+    return [U[1], (-2/(r+0.001))*(U[1]) + arfa[0]*np.sin(U[0]) + arfa[1]*U[0]**3 + arfa[2]*U[0]**2 + arfa[3]*U[0] + arfa[4]]
 
 
-U0 = [0.57684, 0.0001]
-xs = np.linspace(0, 350, k)
+U0 = [0.5758, 0.0001]
+xs = np.linspace(0, 100, k)
 Us = odeint(dU_dr, U0, xs)
 ys = Us[:,0]
 
@@ -145,39 +140,33 @@ def rad(r):
     return np.pi * 4 * r**2
 
 
-intrad = sci.integrate.quad(rad, 0, 225)
 
+intrad = sci.integrate.quad(rad, 0, 120/200)
 
-#print(intrad)
 
 s3 = []
 s32 = []
 
 for i in range(0, k):
-    s3.append(0.5*ys[i]**2 + vtotal(ys)[i])
+    s3.append(0.5*ys[i]**2 + vtotal(x)[i])
     s32.append(intrad[0]*s3[i]/T)
 
 
-def hypt(xs):
-    return (0.58/2)*(1-np.tanh((xs-270)/40))
-
-
-
-#pylab.plot(xs, s32)
+#pylab.plot(x, s32)
 #pylab.show()
 #print(ys)
-pylab.plot(xs, ys)
-pylab.xlabel('r')
-pylab.ylabel('Phi')
-pylab.plot(xs, hypt(xs))
-pylab.show()
+#pylab.plot(xs, ys)
+#pylab.xlabel('r')
+#pylab.ylabel('Phi')
+#pylab.show()
+
 #pylab.plot(x, vtloop(x), label='vtloop')
 #pylab.plot(x, vbloop(x), label='vbloop')
 #pylab.plot(x, vfloop(x), label='vfloop')
 #pylab.plot(x, v0(x), label='v0')
-#pylab.plot(x, vtotal(x), label='Vtotal')
-#pylab.legend()
-#pylab.show()
+pylab.plot(x, vtotal(x), label='Vtotal')
+pylab.legend()
+pylab.show()
 
-#pylab.plot(ys, vtotal(ys))
+#pylab.plot(xs, vtotal(ys))
 #pylab.show()
