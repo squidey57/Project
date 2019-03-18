@@ -5,12 +5,12 @@ from scipy import optimize
 from scipy import integrate
 from scipy.integrate import odeint
 
-k = 1001
+k = 401
 lam = 1/8
 ms = np.sqrt(lam)
 x = np.linspace(0, 1, k)
 Q = 1
-T = 0.61575
+T = 0.6075
 A = 1/(64*np.pi**2)
 mx = 1
 dofb = 3
@@ -110,14 +110,14 @@ for i in range(2, k-1):
 #Fitting to a function
 
 #make in order
-def arf(x, a, b, c, d, f, g):
-    return(a*np.sin(x+g) + b*x**3 + c*x**2 + d*x + f)
+def arf(x, a, c, d, f, g):
+    return(a*np.sin(x) + c*x**3 + d*x**2 + f*x + g)
 
 
 arfa, covarfa = sci.optimize.curve_fit(arf, x[1:k-2], dvtotal)
 
 #pylab.plot(dvtotal)
-#pylab.plot(arfa[0]*np.sin(x) + arfa[1]*x**3 + arfa[2]*x**2 + arfa[3]*x + arfa[4])
+#pylab.plot(arfa[0]*np.sin(x) + arfa[2]*x**3 + arfa[3]*x**2 + arfa[4]*x + arfa[5])
 #pylab.show()
 
 
@@ -130,11 +130,11 @@ D = -ms**2 + dm2b**2 + (1/12 * T**2 * mx**2 - 1/(6*np.pi)*T*mx) + 1/24 * T**2 * 
 
 
 def dU_dr(U, r):
-    return [U[1], (-2/(r+0.001))*(U[1]) + arfa[0]*np.sin(U[0]+arfa[5]) + arfa[1]*U[0]**3 + arfa[2]*U[0]**2 + arfa[3]*U[0] + arfa[4]]
+    return [U[1], (-2/(r+0.001))*(U[1]) + arfa[0]*np.sin(U[0]) + arfa[1]*U[0]**3 + arfa[2]*U[0]**2 + arfa[3]*U[0] + arfa[4]]
 
 
-U0 = [0.57684, 0.0001]
-xs = np.linspace(0, 350, k)
+U0 = [0.610463, 0.0001]
+xs = np.linspace(0, 120, k)
 Us = odeint(dU_dr, U0, xs)
 ys = Us[:,0]
 
@@ -159,7 +159,7 @@ for i in range(0, k):
 
 
 def hypt(xs):
-    return (0.58/2)*(1-np.tanh((xs-270)/40))
+    return (U0[0]/2)*(1-np.tanh((xs-65)/23))
 
 
 
@@ -171,6 +171,7 @@ pylab.xlabel('r')
 pylab.ylabel('Phi')
 pylab.plot(xs, hypt(xs))
 pylab.show()
+
 #pylab.plot(x, vtloop(x), label='vtloop')
 #pylab.plot(x, vbloop(x), label='vbloop')
 #pylab.plot(x, vfloop(x), label='vfloop')
