@@ -5,12 +5,13 @@ from scipy import optimize
 from scipy import integrate
 from scipy.integrate import odeint
 
-k = 1001
-lam = 0.129
-ms = 7813**1/2
-x = np.linspace(0, 100, k)
-Q = 173
-T = 1
+k = 401
+p = 4
+lam = 1/8
+ms = np.sqrt(lam)
+x = np.linspace(0, 1, k)
+Q = 1
+T = np.linspace(0.6075, 0.6175, p)
 A = 1/(64*np.pi**2)
 mx = 1
 dofb = 3
@@ -61,12 +62,15 @@ def vtloop(x):
     return vbloop(x) + vfloop(x) - v0(x)
 
 
+
 def intb(r):
-    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2) + ((mx*x[i])/T)**2)))
+        return (r ** 2) * np.log(1 - np.exp(-np.sqrt((r ** 2) + ((mx * x[i]) / T[0]) ** 2)))
 
 
 def intf(r):
-    return (r**2) * np.log(1+np.exp(-np.sqrt((r**2) + ((mf*x[i])/T)**2)))
+        return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf * x[i]) / T[0]) ** 2)))
+
+
 
 
 i3b = []
@@ -83,15 +87,54 @@ for i in range(0, k):
     i3f.append(sci.integrate.quad(intf,0,np.inf))
     uv3b[i], eb[i] = i3b[i]
     uv3f[i], ef[i] = i3f[i]
-    v3b.append(dofb * ((T**4)/(2*np.pi**2)) * uv3b[i])
-    v3f.append(-doff * ((T**4)/(2*np.pi**2)) * uv3f[i])
+    v3b.append(dofb * ((T[0]**4)/(2*np.pi**2)) * uv3b[i])
+    v3f.append(-doff * ((T[0]**4)/(2*np.pi**2)) * uv3f[i])
     v3.append(v3b[i] + v3f[i])
 
+
+def intb1(r):
+        return (r ** 2) * np.log(1 - np.exp(-np.sqrt((r ** 2) + ((mx * x[i]) / T[1]) ** 2)))
+
+
+def intf1(r):
+    return (r ** 2) * np.log(1 + np.exp(-np.sqrt((r ** 2) + ((mf * x[i]) / T[1]) ** 2)))
+
+
+i3b1 = []
+i3f1 = []
+uv3b1 = np.zeros(k)
+uv3f1 = np.zeros(k)
+eb1 = np.zeros(k)
+ef1 = np.zeros(k)
+v3b_1 = []
+v3f_1 = []
+v31 = []
+for i in range(0, k):
+    i3b1.append(sci.integrate.quad(intb1, 0, np.inf))
+    i3f1.append(sci.integrate.quad(intf1, 0, np.inf))
+    uv3b1[i], eb1[i] = i3b1[i]
+    uv3f1[i], ef1[i] = i3f1[i]
+    v3b_1.append(dofb * ((T[1] ** 4) / (2 * np.pi ** 2)) * uv3b1[i])
+    v3f_1.append(-doff * ((T[1] ** 4) / (2 * np.pi ** 2)) * uv3f1[i])
+    v31.append(v3b_1[i] + v3f_1[i])
+
+
+
+
 B = vtloop(x[1]) + v3[1]
+
+B1 = vtloop(x[1]) + v31[1]
 
 
 def vtotal(x):
     return vtloop(x) + v3 - B
+
+def vtotal1(x):
+    return vtloop(x) + v31 - B1
+
+#int1 = sci.integrate.quad(vtotal,0, 0.56)
+#print(int1)
+
 
 #Differentiating the LHS
 
@@ -104,32 +147,32 @@ for i in range(2, k-1):
 
 #Fitting to a function
 
-
-def arf(x, a, b, c, d, f):
-    return(a*np.sin(x) + b*x**3 + c*x**2 + d*x + f)
+#make in order
+def arf(x, a, c, d, f, g):
+    return(a*np.sin(x) + c*x**3 + d*x**2 + f*x + g)
 
 
 arfa, covarfa = sci.optimize.curve_fit(arf, x[1:k-2], dvtotal)
 
 #pylab.plot(dvtotal)
-#pylab.plot(arfa[0]*np.sin(x) + arfa[1]*x**3 + arfa[2]*x**2 + arfa[3]*x + arfa[4])
+#pylab.plot(arfa[0]*np.sin(x) + arfa[2]*x**3 + arfa[3]*x**2 + arfa[4]*x + arfa[5])
 #pylab.show()
 
 
-#Attempt at solving DE
+#Solving DE
 
 
 cb = 13.94*16
 cf = 13.94
-D = -ms**2 + dm2b**2 + (1/12 * T**2 * mx**2 - 1/(6*np.pi)*T*mx) +1/24 * T**2 * mf**2
+D = -ms**2 + dm2b**2 + (1/12 * T**2 * mx**2 - 1/(6*np.pi)*T*mx) + 1/24 * T**2 * mf**2
 
 
 def dU_dr(U, r):
     return [U[1], (-2/(r+0.001))*(U[1]) + arfa[0]*np.sin(U[0]) + arfa[1]*U[0]**3 + arfa[2]*U[0]**2 + arfa[3]*U[0] + arfa[4]]
 
 
-U0 = [0.5758, 0.0001]
-xs = np.linspace(0, 100, k)
+U0 = [0.610465, 0.0001]
+xs = np.linspace(0, 120, k)
 Us = odeint(dU_dr, U0, xs)
 ys = Us[:,0]
 
@@ -140,24 +183,39 @@ def rad(r):
     return np.pi * 4 * r**2
 
 
+intrad = sci.integrate.quad(rad, 0, 120)
 
-intrad = sci.integrate.quad(rad, 0, 120/200)
 
+#print(intrad)
 
 s3 = []
 s32 = []
 
 for i in range(0, k):
-    s3.append(0.5*ys[i]**2 + vtotal(x)[i])
-    s32.append(intrad[0]*s3[i]/T)
+    s3.append(0.5*(Us[:,1][i])**2 + vtotal(ys)[i])
+    s32.append(intrad[0]*s3[i]/T[0])
 
 
-#pylab.plot(x, s32)
+def hypt(xs):
+    return (U0[0]/2)*(1-np.tanh((xs-65)/23))
+
+
+t = np.empty(k)
+
+for i in range(k):
+    t[i] = T[0]
+
+#print(s32/t)
+
+
+
+#pylab.plot(T, s32)
 #pylab.show()
 #print(ys)
 #pylab.plot(xs, ys)
 #pylab.xlabel('r')
 #pylab.ylabel('Phi')
+#pylab.plot(xs, hypt(xs))
 #pylab.show()
 
 #pylab.plot(x, vtloop(x), label='vtloop')
@@ -165,8 +223,9 @@ for i in range(0, k):
 #pylab.plot(x, vfloop(x), label='vfloop')
 #pylab.plot(x, v0(x), label='v0')
 pylab.plot(x, vtotal(x), label='Vtotal')
+pylab.plot(x, vtotal1(x), label='Vtotal1')
 pylab.legend()
 pylab.show()
 
-#pylab.plot(xs, vtotal(ys))
+#pylab.plot(ys, vtotal(ys))
 #pylab.show()

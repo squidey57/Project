@@ -133,7 +133,7 @@ def dU_dr(U, r):
     return [U[1], (-2/(r+0.001))*(U[1]) + arfa[0]*np.sin(U[0]) + arfa[1]*U[0]**3 + arfa[2]*U[0]**2 + arfa[3]*U[0] + arfa[4]]
 
 
-U0 = [0.610463, 0.0001]
+U0 = [0.610465, 0.0001]
 xs = np.linspace(0, 120, k)
 Us = odeint(dU_dr, U0, xs)
 ys = Us[:,0]
@@ -145,7 +145,7 @@ def rad(r):
     return np.pi * 4 * r**2
 
 
-intrad = sci.integrate.quad(rad, 0, 225)
+intrad = sci.integrate.quad(rad, 0, 120)
 
 
 #print(intrad)
@@ -154,23 +154,30 @@ s3 = []
 s32 = []
 
 for i in range(0, k):
-    s3.append(0.5*ys[i]**2 + vtotal(ys)[i])
-    s32.append(intrad[0]*s3[i]/T)
+    s3.append(0.5*(Us[:,1][i])**2 + vtotal(ys)[i])
+    s32.append(intrad[0]*s3[i])
 
+
+t = np.empty(k)
+
+for i in range(k):
+    t[i] = T
+
+print(s32/t)
 
 def hypt(xs):
     return (U0[0]/2)*(1-np.tanh((xs-65)/23))
 
 
 
-#pylab.plot(xs, s32)
+#pylab.plot(t, s32/t)
 #pylab.show()
 #print(ys)
-pylab.plot(xs, ys)
-pylab.xlabel('r')
-pylab.ylabel('Phi')
-pylab.plot(xs, hypt(xs))
-pylab.show()
+#pylab.plot(xs, ys)
+#pylab.xlabel('r')
+#pylab.ylabel('Phi')
+#pylab.plot(xs, hypt(xs))
+#pylab.show()
 
 #pylab.plot(x, vtloop(x), label='vtloop')
 #pylab.plot(x, vbloop(x), label='vbloop')
