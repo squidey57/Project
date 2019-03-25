@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c26f3136-ae1b-436d-b1a1-afbf468f4a0e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Old Units.py" beforeDir="false" afterPath="$PROJECT_DIR$/Section A with loop over T.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Section A - Again.py" beforeDir="false" afterPath="$PROJECT_DIR$/Section A - Again.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Section A with loop over T.py" beforeDir="false" afterPath="$PROJECT_DIR$/Section A - V(phi(r)).py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -59,15 +59,15 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="dummy" value="46" />
-          <entry key="py" value="15711" />
+          <entry key="dummy" value="58" />
+          <entry key="py" value="16833" />
           <entry key="txt" value="216" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="262" />
-          <entry key="Python" value="15711" />
+          <entry key="PLAIN_TEXT" value="274" />
+          <entry key="Python" value="16833" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
@@ -97,10 +97,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Section A with loop over T.py">
+        <entry file="file://$PROJECT_DIR$/Section A - V(phi(r)).py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="500">
-              <caret line="227" column="12" lean-forward="true" selection-start-line="227" selection-start-column="12" selection-end-line="227" selection-end-column="12" />
+            <state relative-caret-position="425">
+              <caret line="252" lean-forward="true" selection-start-line="252" selection-end-line="252" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -111,8 +111,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Section A.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1150">
-              <caret line="50" column="16" selection-start-line="50" selection-start-column="16" selection-end-line="50" selection-end-column="16" />
+            <state>
+              <caret line="29" column="16" lean-forward="true" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
                 <marker date="1548762121143" expanded="true" signature="1375:1453" ph="..." />
@@ -124,11 +124,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Section A - Again.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="265">
-              <caret line="165" column="12" lean-forward="true" selection-start-line="165" selection-start-column="12" selection-end-line="165" selection-end-column="12" />
+            <state relative-caret-position="425">
+              <caret line="233" lean-forward="true" selection-start-line="233" selection-end-line="233" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <marker date="1553350153363" expanded="true" signature="3410:3459" ph="..." />
+                <marker date="1553528323010" expanded="true" signature="4406:4454" ph="..." />
               </folding>
             </state>
           </provider>
@@ -151,7 +151,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/S3 Vs R.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2550">
+            <state relative-caret-position="525">
               <caret line="105" column="43" selection-start-line="105" selection-start-column="43" selection-end-line="105" selection-end-column="43" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -205,6 +205,7 @@
         <option value="$PROJECT_DIR$/Old Units.py" />
         <option value="$PROJECT_DIR$/Section A - Again.py" />
         <option value="$PROJECT_DIR$/Section A with loop over T.py" />
+        <option value="$PROJECT_DIR$/Section A - V(phi(r)).py" />
       </list>
     </option>
   </component>
@@ -215,8 +216,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="109" />
-    <option name="y" value="36" />
+    <option name="x" value="-61" />
+    <option name="y" value="-20" />
     <option name="width" value="1617" />
     <option name="height" value="1017" />
   </component>
@@ -256,7 +257,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Section A with loop over T">
+  <component name="RunManager" selected="Python.Section A - V(phi(r))">
     <configuration name="Completely-New_Copy" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -290,7 +291,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\aidan\OneDrive\Documents\GitHub\Project\Section A with loop over T.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\aidan\OneDrive\Documents\GitHub\Project\Section A - V(phi(r)).py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -320,6 +321,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Section A - V(phi(r))" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Section A - V(phi(r)).py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Section A with loop over T" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -332,28 +354,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Section A with loop over T.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Sorting Units" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Project" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Sorting Units.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\aidan\OneDrive\Documents\GitHub\Project\Section A - V(phi(r)).py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -364,18 +365,18 @@
     </configuration>
     <list>
       <item itemvalue="Python.Section A - Again" />
-      <item itemvalue="Python.Sorting Units" />
       <item itemvalue="Python.Completely-New_Copy" />
       <item itemvalue="Python.Old Units" />
       <item itemvalue="Python.Section A with loop over T" />
+      <item itemvalue="Python.Section A - V(phi(r))" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Section A with loop over T" />
+        <item itemvalue="Python.Section A - V(phi(r))" />
         <item itemvalue="Python.Section A - Again" />
+        <item itemvalue="Python.Section A with loop over T" />
         <item itemvalue="Python.Old Units" />
         <item itemvalue="Python.Completely-New_Copy" />
-        <item itemvalue="Python.Sorting Units" />
       </list>
     </recent_temporary>
   </component>
@@ -434,7 +435,7 @@
     <frame x="-11" y="-11" width="1942" height="1102" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13573702" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13308589" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -497,17 +498,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Section A.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1150">
-          <caret line="50" column="16" selection-start-line="50" selection-start-column="16" selection-end-line="50" selection-end-column="16" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <marker date="1548762121143" expanded="true" signature="1375:1453" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/testing DE.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="275">
@@ -516,16 +506,6 @@
             <element signature="e#0#18#0" expanded="true" />
             <marker date="1551188762062" expanded="true" signature="220:225" ph="..." />
             <marker date="1551188762062" expanded="true" signature="246:291" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/S3 Vs R.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2550">
-          <caret line="105" column="43" selection-start-line="105" selection-start-column="43" selection-end-line="105" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -540,21 +520,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Section A - Again.py">
+    <entry file="file://$PROJECT_DIR$/Section A.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="165" column="12" lean-forward="true" selection-start-line="165" selection-start-column="12" selection-end-line="165" selection-end-column="12" />
+        <state>
+          <caret line="29" column="16" lean-forward="true" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1553350153363" expanded="true" signature="3410:3459" ph="..." />
+            <marker date="1548762121143" expanded="true" signature="1375:1453" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Section A with loop over T.py">
+    <entry file="file://$PROJECT_DIR$/Section A - Again.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="500">
-          <caret line="227" column="12" lean-forward="true" selection-start-line="227" selection-start-column="12" selection-end-line="227" selection-end-column="12" />
+        <state relative-caret-position="425">
+          <caret line="233" lean-forward="true" selection-start-line="233" selection-end-line="233" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <marker date="1553528323010" expanded="true" signature="4406:4454" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/S3 Vs R.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="105" column="43" selection-start-line="105" selection-start-column="43" selection-end-line="105" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Section A - V(phi(r)).py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="252" lean-forward="true" selection-start-line="252" selection-end-line="252" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

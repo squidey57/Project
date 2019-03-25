@@ -10,7 +10,7 @@ lam = 1/8
 ms = np.sqrt(lam)
 x = np.linspace(0, 1, k)
 Q = 1
-T = 0.6075
+T = 0.61
 A = 1/(64*np.pi**2)
 mx = 1
 dofb = 3
@@ -93,6 +93,15 @@ B = vtloop(x[1]) + v3[1]
 def vtotal(x):
     return vtloop(x) + v3 - B
 
+#pylab.plot(x, vtloop(x), label='vtloop')
+#pylab.plot(x, vbloop(x), label='vbloop')
+#pylab.plot(x, vfloop(x), label='vfloop')
+#pylab.plot(x, v0(x), label='v0')
+pylab.plot(x, vtotal(x), label='Vtotal')
+#pylab.legend()
+pylab.show()
+
+
 
 #int1 = sci.integrate.quad(vtotal,0, 0.56)
 #print(int1)
@@ -133,10 +142,11 @@ def dU_dr(U, r):
     return [U[1], (-2/(r+0.001))*(U[1]) + arfa[0]*np.sin(U[0]) + arfa[1]*U[0]**3 + arfa[2]*U[0]**2 + arfa[3]*U[0] + arfa[4]]
 
 
-U0 = [0.610465, 0.0001]
-xs = np.linspace(0, 120, k)
+U0 = [0.6074943, 0.0001]
+xs = np.linspace(0, 350, k)
 Us = odeint(dU_dr, U0, xs)
 ys = Us[:,0]
+ysp = Us[:,1]
 
 #Integration for S3 graph
 
@@ -145,7 +155,42 @@ def rad(r):
     return np.pi * 4 * r**2
 
 
-intrad = sci.integrate.quad(rad, 0, 120)
+intrad = sci.integrate.quad(rad, 0, 125)
+
+######################################################################################################################
+
+def intb(r):
+    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2) + ((mx*ys[i])/T)**2)))
+
+
+def intf(r):
+    return (r**2) * np.log(1+np.exp(-np.sqrt((r**2) + ((mf*ys[i])/T)**2)))
+
+
+i3b = []
+i3f = []
+uv3b = np.zeros(k)
+uv3f = np.zeros(k)
+eb = np.zeros(k)
+ef = np.zeros(k)
+v3b = []
+v3f = []
+v3 = []
+for i in range(0, k):
+    i3b.append(sci.integrate.quad(intb,0,np.inf))
+    i3f.append(sci.integrate.quad(intf,0,np.inf))
+    uv3b[i], eb[i] = i3b[i]
+    uv3f[i], ef[i] = i3f[i]
+    v3b.append(dofb * ((T**4)/(2*np.pi**2)) * uv3b[i])
+    v3f.append(-doff * ((T**4)/(2*np.pi**2)) * uv3f[i])
+    v3.append(v3b[i] + v3f[i])
+
+B = vtloop(ys[1]) + v3[1]
+
+
+def vtotal(ys):
+    return vtloop(ys) + v3 - B
+
 
 
 #print(intrad)
@@ -158,34 +203,31 @@ for i in range(0, k):
     s32.append(intrad[0]*s3[i])
 
 
-t = np.empty(k)
-
-for i in range(k):
-    t[i] = T
-
-print(s32/t)
 
 def hypt(xs):
-    return (U0[0]/2)*(1-np.tanh((xs-65)/23))
+    return (U0[0]/2)*(1-np.tanh((xs-40)/30))
 
+
+#print(vtotal(q[0]))
+
+
+p = int(round(40/125 * k))
+q = ys[p]
+q1 = ysp[p]
+s321 = intrad[0] * ((q1**2)/2 + vtotal(q)[1])/T
+
+#print(s321)
 
 
 #pylab.plot(t, s32/t)
 #pylab.show()
 #print(ys)
-#pylab.plot(xs, ys)
-#pylab.xlabel('r')
-#pylab.ylabel('Phi')
+pylab.plot(xs, ys)
+pylab.xlabel('r')
+pylab.ylabel('Phi')
 #pylab.plot(xs, hypt(xs))
-#pylab.show()
+pylab.show()
 
-#pylab.plot(x, vtloop(x), label='vtloop')
-#pylab.plot(x, vbloop(x), label='vbloop')
-#pylab.plot(x, vfloop(x), label='vfloop')
-#pylab.plot(x, v0(x), label='v0')
-#pylab.plot(x, vtotal(x), label='Vtotal')
-#pylab.legend()
-#pylab.show()
-
-#pylab.plot(ys, vtotal(ys))
+#pylab.plot(xs, ysp**2 / 2)
+#pylab.plot(xs, vtotal(ys))
 #pylab.show()
