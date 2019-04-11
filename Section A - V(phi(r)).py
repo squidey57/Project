@@ -8,7 +8,7 @@ from scipy.integrate import odeint
 k = 401
 lam = 1/8
 ms = np.sqrt(lam)
-x = np.linspace(0, 1, k)
+x = np.linspace(0, 1.5, k)
 Q = 1
 T = 0.61
 A = 1/(64*np.pi**2)
@@ -46,6 +46,27 @@ dm2f = 0.5 * (1 / xd[0]) * ((d2fv1f1 * xd[0]) - (3 * dfv1f1))
 def v0(x):
     return (-((ms**2)/2)*x**2) + ((lam/4)*(x**4))
 
+#pylab.plot(x, v0(x))
+#pylab.show()
+
+def dU1_dr(u, r):
+    return [u[1], -ms**2*u[0] + lam*u[0]**3]
+
+
+u0 = [-1, 0.0001]
+xs1 = np.linspace(-1, 30, k)
+Us1 = odeint(dU1_dr, u0, xs1)
+ys1 = Us1[:,0]
+ysp1 = Us1[:,1]
+
+def fitting(x):
+    return(np.tanh(x))
+
+
+
+pylab.plot(xs1, fitting((xs1-19)/4))
+pylab.plot(xs1, ys1)
+pylab.show()
 
 def vbloop(x):
     return(((-((ms**2)/2)*x**2) + ((lam/4)*(x**4))) + (A*(dofb*((mx*x)**4))*(np.log(((mx*x)**2)/(Q**2))-1.5)) \
@@ -79,8 +100,8 @@ v3b = []
 v3f = []
 v3 = []
 for i in range(0, k):
-    i3b.append(sci.integrate.quad(intb,0,np.inf))
-    i3f.append(sci.integrate.quad(intf,0,np.inf))
+    i3b.append(sci.integrate.quad(intb, 0, np.inf))
+    i3f.append(sci.integrate.quad(intf, 0, np.inf))
     uv3b[i], eb[i] = i3b[i]
     uv3f[i], ef[i] = i3f[i]
     v3b.append(dofb * ((T**4)/(2*np.pi**2)) * uv3b[i])
@@ -116,6 +137,8 @@ dvtotal = []
 for i in range(2, k-1):
     dvtotal.append((vtotal(x)[i+1] - vtotal(x)[i-1])/(2*0.01))
 
+
+
 #Fitting to a function
 
 #make in order
@@ -143,10 +166,12 @@ def dU_dr(U, r):
 
 
 U0 = [0.6074943, 0.0001]
-xs = np.linspace(0, 350, k)
+xs = np.linspace(0, 150, k)
 Us = odeint(dU_dr, U0, xs)
 ys = Us[:,0]
 ysp = Us[:,1]
+
+
 
 #Integration for S3 graph
 
@@ -160,22 +185,22 @@ intrad = sci.integrate.quad(rad, 0, 125)
 ######################################################################################################################
 
 
-def v0_1(ys):
-    return (-((ms**2)/2)*ys[i]**2) + ((lam/4)*(ys[i]**4))
+def v0_1(t):
+    return (-((ms**2)/2)*t**2) + ((lam/4)*(t**4))
 
 
-def vbloop_1(ys):
-    return(((-((ms**2)/2)*ys[i]**2) + ((lam/4)*(ys[i]**4))) + (A*(dofb*((mx*ys[i])**4))*(np.log(((mx*ys[i])**2)/(Q**2))-1.5)) \
-           + (((dm2b / 2) * ys[i] ** 2) + ((dlb / 4) * ys[i] ** 4)))
+def vbloop_1(t):
+    return(((-((ms**2)/2)*t**2) + ((lam/4)*(t**4))) + (A*(dofb*((mx*t)**4))*(np.log(((mx*t)**2)/(Q**2))-1.5)) \
+           + (((dm2b / 2) * t ** 2) + ((dlb / 4) * t ** 4)))
 
 
-def vfloop_1(ys):
-    return ((-((ms**2)/2)*ys[i]**2) + ((lam/4)*(ys[i]**4))) + (-A*((doff*((mf*ys[i])**4))*(np.log(((mf*ys[i])**2)/(Q**2))-1.5)))\
-           + (((dm2f / 2) * ys[i] ** 2) + ((dlf / 4) * ys[i] ** 4))
+def vfloop_1(t):
+    return ((-((ms**2)/2)*t**2) + ((lam/4)*(t**4))) + (-A*((doff*((mf*t)**4))*(np.log(((mf*t)**2)/(Q**2))-1.5)))\
+           + (((dm2f / 2) * t ** 2) + ((dlf / 4) * t ** 4))
 
 
-def vtloop_1(ys):
-    return vbloop_1(x) + vfloop_1(x) - v0_1(x)
+def vtloop_1(t):
+    return vbloop_1(t) + vfloop_1(t) - v0_1(t)
 
 
 def intb_1(r):
@@ -196,8 +221,8 @@ v3b_1 = []
 v3f_1 = []
 v3_1 = []
 for i in range(0, k):
-    i3b_1.append(sci.integrate.quad(intb,0,np.inf))
-    i3f_1.append(sci.integrate.quad(intf,0,np.inf))
+    i3b_1.append(sci.integrate.quad(intb_1,0,np.inf))
+    i3f_1.append(sci.integrate.quad(intf_1,0,np.inf))
     uv3b_1[i], eb_1[i] = i3b_1[i]
     uv3f_1[i], ef_1[i] = i3f_1[i]
     v3b_1.append(dofb * ((T**4)/(2*np.pi**2)) * uv3b_1[i])
@@ -210,33 +235,34 @@ B_1 = vtloop_1(ys[1]) + v3_1[1]
 def vtotal_1(ys):
     return vtloop_1(ys) + v3_1 - B_1
 
+def integrandofr(r):
+    return r**2
 
 
-#print(intrad)
+integrand = []
+integrand.append((vtotal_1(ys) + 0.5*ysp**2)*integrandofr(xs))
 
-s3 = []
-s32 = []
 
-for i in range(0, k):
-    s3.append(0.5*(Us[:,1][i])**2 + vtotal_1(ys)[i])
-    s32.append(intrad[0]*s3[i])
+ints3 = []
+ints3 = np.trapz(integrand, xs)
 
+print(4*np.pi*ints3/T)
 
 
 def hypt(xs):
-    return (U0[0]/2)*(1-np.tanh((xs-40)/30))
+    return (U0[0]/2)*(1-np.tanh((xs-80)/23))
 
 
 #print(vtotal(q[0]))
 
+#pylab.plot(vtotal_1(ys))
 
-p = int(round(40/125 * k))
-q = ys[p]
-q1 = ysp[p]
-s321 = intrad[0] * ((q1**2)/2 + vtotal(q)[1])/T
+#p = int(round(40/125 * k))
+#q = ys[p]
+#q1 = ysp[p]
+#s321 = intrad[0] * ((q1**2)/2 + vtotal(q)[1])/T
 
 #print(s321)
-
 
 #pylab.plot(t, s32/t)
 #pylab.show()
@@ -248,5 +274,18 @@ s321 = intrad[0] * ((q1**2)/2 + vtotal(q)[1])/T
 #pylab.show()
 
 #pylab.plot(xs, ysp**2 / 2)
-pylab.plot(xs, vtotal_1(ys))
-pylab.show()
+#pylab.plot(xs, ((vtotal_1(ys)) + ysp**2 / 2)*integrandofr(xs))
+#pylab.show()
+
+#print(vtotal_1(ys)[0])
+#print(ys[0])
+
+#pylab.plot(xs[1:400], 2* ysp[1:400]**2/xs[1:400])
+#pylab.show()
+
+#p = 2 * ysp[1:400]**2/xs[1:400]
+#xs2 = np.linspace(1, 150, k-2)
+#pp = sci.integrate.trapz(p, xs2, k-2)
+#print(pp)
+#print(vtotal_1(ys)[0])
+#print(vtotal_1(ys)[1]/pp)

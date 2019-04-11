@@ -1,139 +1,264 @@
 import numpy as np
 import scipy as sci
-from scipy import integrate
-from scipy import optimize
 import pylab
+from scipy import optimize
+from scipy import integrate
+from scipy.integrate import odeint
 
-#dhsjahjshfhdfhsdjhgdshgjdshghdfhdihfshfdsfd
-#SectionA
-k = 400
-x = np.linspace(0,k,k)
-m = 125/np.sqrt(2)
-l = 0.129
-j = 2
-gf = np.array([-12,6,3,1])
-m0 = np.array([173,80,91])
-gc = np.array([((np.sqrt(2)*m0[0])/246),(2*m0[1]/246), np.sqrt(((4*m0[2]**2)/(246**2))-(2*m0[1]/246)**2)])
-m_x = np.array([(gc[0])/np.sqrt(2), (gc[1]/2), np.sqrt((((gc[1]**2)+(gc[2]**2))/4)), j])
-Q = 173
-A = (1/(64*np.pi**2))
+k = 401
+lam = 1/8
+ms = np.sqrt(lam)
+x = np.linspace(0, 1, k)
+Q = 1
+T = 0.609
+A = 1/(64*np.pi**2)
+mx = 1
+dofb = 3
+mf = 1
+doff = 4
+h = 0.01
+xd = np.array([1, (1 + h), (1 - h)])
+
+uv2b = []
+uv2f = []
+
+for i in range(0, 3):
+    uv2b.append(A * dofb * ((mx * xd[i]) ** 4) * (np.log(((mx * xd[i]) ** 2) / Q ** 2) - 1.5))
+    uv2f.append(A * -doff * ((mf * xd[i]) ** 4) * (np.log(((mf * xd[i]) ** 2) / Q ** 2) - 1.5))
+
+v2x0b1 = uv2b[0]
+v2xpb1 = uv2b[1]
+v2xnb1 = uv2b[2]
+dfv1b1 = ((v2xpb1 - v2xnb1) / (2 * h))
+d2fv1b1 = ((v2xpb1 - (2 * v2x0b1) + v2xnb1) / (h ** 2))
+dlb = 0.5 * (dfv1b1 - d2fv1b1)
+dm2b = 0.5 * (1 / xd[0]) * ((d2fv1b1 * xd[0]) - (3 * dfv1b1))
+
+v2x0f1 = uv2f[0]
+v2xpf1 = uv2f[1]
+v2xnf1 = uv2f[2]
+dfv1f1 = (v2xpf1 - v2xnf1) / (2 * h)
+d2fv1f1 = (v2xpf1 - (2 * v2x0f1) + v2xnf1) / (h ** 2)
+dlf = 0.5 * (dfv1f1 - d2fv1f1)
+dm2f = 0.5 * (1 / xd[0]) * ((d2fv1f1 * xd[0]) - (3 * dfv1f1))
+
 
 def v0(x):
-    return -(((m**2)/2)*x**2)+((l/4)*x**4)
+    return (-((ms**2)/2)*x**2) + ((lam/4)*(x**4))
 
 
-def v1t(x):
-    return A*gf[0]*(((m_x[0]*x)**4)*(np.log(((m_x[0]*x)**2)/(Q**2))-1.5))
-def v1w(x):
-    return A*gf[1]*(((m_x[1]*x)**4)*(np.log(((m_x[1]*x)**2)/(Q**2))-1.5))
-def v1z(x):
-    return A*gf[2]*(((m_x[2]*x)**4)*(np.log(((m_x[2]*x)**2)/(Q**2))-1.5))
-def v1x(x):
-    return A*gf[3]*(((m_x[3]*x)**4)*(np.log(((m_x[3]*x)**2)/(Q**2))-1.5))
-
-#Requires the calculation of a first and second derivative
-h = 0.001
-xd = np.array([246,246+h,246-h])
-
-#It is possible to do the derivatives of V2 algebraically, but V1 is not as easy to calculate
-#The masses will be slightly different for +h and -h for each case, so they must calculated seperately
-
-mh0 = np.array([(gc[0]/np.sqrt(2))*xd[0], (gc[1]/2)*xd[0], np.sqrt((((gc[1]**2)+(gc[2]**2))/4)*xd[0]**2), (j*xd[0])])
-mhp = np.array([(gc[0]/np.sqrt(2))*xd[1], (gc[1]/2)*xd[1], np.sqrt((((gc[1]**2)+(gc[2]**2))/4)*xd[1]**2), (j*xd[1])])
-mhn = np.array([(gc[0]/np.sqrt(2))*xd[2], (gc[1]/2)*xd[2], np.sqrt((((gc[1]**2)+(gc[2]**2))/4)*xd[2]**2), (j*xd[2])])
+def vbloop(x):
+    return(((-((ms**2)/2)*x**2) + ((lam/4)*(x**4))) + (A*(dofb*((mx*x)**4))*(np.log(((mx*x)**2)/(Q**2))-1.5)) \
+           + (((dm2b / 2) * x ** 2) + ((dlb / 4) * x ** 4)))
 
 
-#Now to calculate a +h and -h for the V1
-
-v10 = []
-v1p = []
-v1n = []
-for i in range(0,4):
-    v10.append(gf[i]*(mh0[i]**4)*(np.log((mh0[i]**2)/Q**2)-1.5))
-    v1p.append(gf[i] * (mhp[i] ** 4) * (np.log((mhp[i] ** 2) / Q ** 2) - 1.5))
-    v1n.append(gf[i] * (mhn[i] ** 4) * (np.log((mhn[i] ** 2) / Q ** 2) - 1.5))
-
-fh0 = (1/(64*np.pi**2))*np.sum(v10)
-fhp = (1/(64*np.pi**2))*np.sum(v1p)
-fhn = (1/(64*np.pi**2))*np.sum(v1n)
-
-#Now it is possible to the derivates of V1
-
-dfv1 = (fhp-fh0)/h
-d2fv1 = (fhp - (2*fh0) + fhn)/(h**2)
-
-#Now that we have these differential values, it is now possible to calculate dm2 and dl
-
-dl = 0.5*(((1/(xd[0]**3))*dfv1) - ((1/(xd[0]**2))*d2fv1))
-dm2 = -d2fv1 - (3*dl*xd[0]**2)
-
-def v2(x):
-    return ((dm2/2)*x**2) + ((dl/4)*x**4)
+def vfloop(x):
+    return ((-((ms**2)/2)*x**2) + ((lam/4)*(x**4))) + (-A*((doff*((mf*x)**4))*(np.log(((mf*x)**2)/(Q**2))-1.5)))\
+           + (((dm2f / 2) * x ** 2) + ((dlf / 4) * x ** 4))
 
 
-def vnloop(x):
-    return v0(x) + v1t(x) + v1w(x) + v1z(x) + v2(x) + v1x(x)
-
-T = 105
+def vtloop(x):
+    return vbloop(x) + vfloop(x) - v0(x)
 
 
-def it(r):
-    return (r**2)*np.log(1+np.exp(-np.sqrt((r**2)+((((m_x[0])*(x[i]))**2)/T**2))))
-def iw(r):
-    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((((m_x[1])*(x[i])))**2)/T**2)))
-def iz(r):
-    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((((m_x[2])*(x[i])))**2)/T**2)))
-def ix(r):
-    return (r**2)*np.log(1-np.exp(-np.sqrt((r**2)+((((m_x[3])*(x[i])))**2)/T**2)))
+def intb(r):
+    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2) + ((mx*x[i])/T)**2)))
 
 
-#Now to do the integral for all possible values of the masses
+def intf(r):
+    return (r**2) * np.log(1+np.exp(-np.sqrt((r**2) + ((mf*x[i])/T)**2)))
 
 
-
-#From this integral function, each set is given 2 values, one is the actual result, the other is
-#the associated error term, it is necessary to seperate these 2 values to continue
-intt = []
-intw = []
-intz = []
-intx = []
-for i in range(0,k):
-    intt.append(sci.integrate.quad(it,0,np.inf))
-    intw.append(sci.integrate.quad(iw,0,np.inf))
-    intz.append(sci.integrate.quad(iz,0,np.inf))
-    intx.append(sci.integrate.quad(ix,0,np.inf))
-
-uv3t = np.zeros(k)
-uv3w = np.zeros(k)
-uv3z = np.zeros(k)
-uv3x = np.zeros(k)
-et = np.zeros(k)
-ew = np.zeros(k)
-ez = np.zeros(k)
-ex = np.zeros(k)
-for i in range(0,k):
-    uv3t[i], et[i] = intt[i]
-    uv3w[i], ew[i] = intw[i]
-    uv3z[i], ez[i] = intz[i]
-    uv3x[i], ex[i] = intx[i]
-
-v3t = gf[0]*((T**4)/(2*np.pi**2))*uv3t
-v3w = gf[1]*((T**4)/(2*np.pi**2))*uv3w
-v3z = gf[2]*((T**4)/(2*np.pi**2))*uv3z
-v3x = gf[3]*((T**4)/(2*np.pi**2))*uv3x
-
-#Now to collate these terms to give a full v3
-
+i3b = []
+i3f = []
+uv3b = np.zeros(k)
+uv3f = np.zeros(k)
+eb = np.zeros(k)
+ef = np.zeros(k)
+v3b = []
+v3f = []
 v3 = []
-for i in range(0,k):
-    v3.append(v3t[i]+v3w[i]+v3z[i]+v3x[i])
+for i in range(0, k):
+    i3b.append(sci.integrate.quad(intb,0,np.inf))
+    i3f.append(sci.integrate.quad(intf,0,np.inf))
+    uv3b[i], eb[i] = i3b[i]
+    uv3f[i], ef[i] = i3f[i]
+    v3b.append(dofb * ((T**4)/(2*np.pi**2)) * uv3b[i])
+    v3f.append(-doff * ((T**4)/(2*np.pi**2)) * uv3f[i])
+    v3.append(v3b[i] + v3f[i])
 
-vtot = vnloop(x)+v3
+B = vtloop(x[1]) + v3[1]
 
-#pylab.plot(vnloop(x), label='ggyugu')
-pylab.plot(vtot - vtot[1], label='j=2')
-pylab.legend()
-#pylab.savefig('Thermal and X boson, j=-4')
-#pylab.ylim(-300,1000)
-pylab.xlim(0,250)
+
+def vtotal(x):
+    return vtloop(x) + v3 - B
+
+#pylab.plot(x, vtloop(x), label='vtloop')
+#pylab.plot(x, vbloop(x), label='vbloop')
+#pylab.plot(x, vfloop(x), label='vfloop')
+#pylab.plot(x, v0(x), label='v0')
+#pylab.plot(x, vtotal(x), label='Vtotal')
+#pylab.legend()
+#pylab.show()
+
+
+
+#int1 = sci.integrate.quad(vtotal,0, 0.56)
+#print(int1)
+
+
+#Differentiating the LHS
+
+
+dvtotal = []
+
+
+for i in range(2, k-1):
+    dvtotal.append((vtotal(x)[i+1] - vtotal(x)[i-1])/(2*0.01))
+
+#Fitting to a function
+
+#make in order
+def arf(x, a, c, d, f, g):
+    return(a*np.sin(x) + c*x**3 + d*x**2 + f*x + g)
+
+
+arfa, covarfa = sci.optimize.curve_fit(arf, x[1:k-2], dvtotal)
+
+#pylab.plot(dvtotal)
+#pylab.plot(arfa[0]*np.sin(x) + arfa[2]*x**3 + arfa[3]*x**2 + arfa[4]*x + arfa[5])
+#pylab.show()
+
+
+#Solving DE
+
+
+cb = 13.94*16
+cf = 13.94
+D = -ms**2 + dm2b**2 + (1/12 * T**2 * mx**2 - 1/(6*np.pi)*T*mx) + 1/24 * T**2 * mf**2
+
+
+def dU_dr(U, r):
+    return [U[1], (-2/(r+0.001))*(U[1]) + arfa[0]*np.sin(U[0]) + arfa[1]*U[0]**3 + arfa[2]*U[0]**2 + arfa[3]*U[0] + arfa[4]]
+
+
+U0 = [0.609785, 0.0001]
+xs = np.linspace(0, 150, k)
+Us = odeint(dU_dr, U0, xs)
+ys = Us[:,0]
+ysp = Us[:,1]
+
+
+
+#Integration for S3 graph
+
+
+def rad(r):
+    return np.pi * 4 * r**2
+
+
+intrad = sci.integrate.quad(rad, 0, 125)
+
+######################################################################################################################
+
+
+def v0_1(t):
+    return (-((ms**2)/2)*t**2) + ((lam/4)*(t**4))
+
+
+def vbloop_1(t):
+    return(((-((ms**2)/2)*t**2) + ((lam/4)*(t**4))) + (A*(dofb*((mx*t)**4))*(np.log(((mx*t)**2)/(Q**2))-1.5)) \
+           + (((dm2b / 2) * t ** 2) + ((dlb / 4) * t ** 4)))
+
+
+def vfloop_1(t):
+    return ((-((ms**2)/2)*t**2) + ((lam/4)*(t**4))) + (-A*((doff*((mf*t)**4))*(np.log(((mf*t)**2)/(Q**2))-1.5)))\
+           + (((dm2f / 2) * t ** 2) + ((dlf / 4) * t ** 4))
+
+
+def vtloop_1(t):
+    return vbloop_1(t) + vfloop_1(t) - v0_1(t)
+
+
+def intb_1(r):
+    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2) + ((mx*ys[i])/T)**2)))
+
+
+def intf_1(r):
+    return (r**2) * np.log(1+np.exp(-np.sqrt((r**2) + ((mf*ys[i])/T)**2)))
+
+
+i3b_1 = []
+i3f_1 = []
+uv3b_1 = np.zeros(k)
+uv3f_1 = np.zeros(k)
+eb_1 = np.zeros(k)
+ef_1 = np.zeros(k)
+v3b_1 = []
+v3f_1 = []
+v3_1 = []
+for i in range(0, k):
+    i3b_1.append(sci.integrate.quad(intb_1,0,np.inf))
+    i3f_1.append(sci.integrate.quad(intf_1,0,np.inf))
+    uv3b_1[i], eb_1[i] = i3b_1[i]
+    uv3f_1[i], ef_1[i] = i3f_1[i]
+    v3b_1.append(dofb * ((T**4)/(2*np.pi**2)) * uv3b_1[i])
+    v3f_1.append(-doff * ((T**4)/(2*np.pi**2)) * uv3f_1[i])
+    v3_1.append(v3b_1[i] + v3f_1[i])
+
+B_1 = vtloop_1(ys[1]) + v3_1[1]
+
+
+def vtotal_1(ys):
+    return vtloop_1(ys) + v3_1 - B_1 - 0.000618
+
+def integrandofr(r):
+    return r**2
+
+
+integrand = []
+integrand.append((vtotal_1(ys) + 0.5*ysp**2)*integrandofr(xs))
+
+
+ints3 = []
+ints3 = np.trapz(integrand, xs)
+
+print(4*np.pi*ints3/T)
+
+
+def hypt(xs):
+    return (U0[0]/2)*(1-np.tanh((xs-80)/23))
+
+
+#print(vtotal(q[0]))
+
+pylab.plot(ysp**2 / 2)
 pylab.show()
+pylab.plot(vtotal_1(ys))
+
+#pylab.plot(t, s32/t)
+#pylab.show()
+#print(ys)
+#pylab.plot(xs, ys)
+#pylab.xlabel('r')
+#pylab.ylabel('Phi')
+#pylab.plot(xs, hypt(xs))
+pylab.show()
+
+#pylab.plot(xs, ysp**2 / 2)
+pylab.plot(xs, ((vtotal_1(ys)) + ysp**2 / 2)*integrandofr(xs))
+pylab.show()
+
+#print(vtotal_1(ys)[0])
+#print(ys[0])
+
+
+#pylab.plot(xs[1:400], 2* ysp[1:400]**2/xs[1:400])
+#pylab.show()
+
+#p = 2 * ysp[1:400]**2/xs[1:400]
+#xs2 = np.linspace(1, 150, k-2)
+#pp = sci.integrate.trapz(p, xs2, k-2)
+#print(pp)
+#print(vtotal_1(ys)[0])
+#print(vtotal_1(ys)[1]/pp)
