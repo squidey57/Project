@@ -109,7 +109,7 @@ for i in range(0, k):
     v3.append(v3b[i] + v3f[i])
 
 B = vtloop(x[1]) + v3[1]
-
+print(B)
 
 def vtotal(x):
     return vtloop(x) + v3 - B
@@ -136,7 +136,6 @@ dvtotal = []
 
 for i in range(2, k-1):
     dvtotal.append((vtotal(x)[i+1] - vtotal(x)[i-1])/(2*0.01))
-
 
 
 #Fitting to a function

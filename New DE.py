@@ -4,7 +4,9 @@ from scipy import integrate
 import pylab
 from scipy.integrate import odeint
 
-T = 1
+#Critical Temp=0.6175
+
+T = 0.61
 k = 401
 kb = 1
 dofb = 3
@@ -74,33 +76,55 @@ def vtloop(x):
 #Temperature corrections for potential
 
 def intb(r, t):
-    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2) + ((kb*t)/T)**2)))
+    return (r**2) * np.log(1-np.exp(-np.sqrt((r**2) + (((kb*t)/T)**2))))
 
 
 def intf(r, t):
-    return (r**2) * np.log(1+np.exp(-np.sqrt((r**2) + ((kf*t)/T)**2)))
+    return (r**2) * np.log(1+np.exp(-np.sqrt((r**2) + (((kf*t)/T)**2))))
 
 
 def solb(t):
-    actb, errb = sci.integrate.quad(intb, 0, np.inf, args=(t))
+    actb, errb = sci.integrate.quad(intb, 0.0, np.inf, args=(t))
     return actb*(dofb * ((T**4)/(2*np.pi**2)))
 
 
 def solf(t):
-    actf, errf = sci.integrate.quad(intf, 0, np.inf, args=(t))
+    actf, errf = sci.integrate.quad(intf, 0.0, np.inf, args=(t))
     return actf*(-doff * ((T**4)/(2*np.pi**2)))
 
 
-B = solf(x[1]) + solb(x[1])
+B = solf(x[201]) + solb(x[201])
+
 
 
 def vtotal(t):
     return vtloop(t) + solb(t) + solf(t) - B
 
+#Loop to plot vtotal:
+
+
+vtotplot = []
+
+for i in range(0, k):
+    vtotplot.append(vtotal(x[i]))
+
+#pylab.plot(x, vtotplot)
+#pylab.show()
+
 
 def dvtotal(t):
-    return (vtotal(t)[i+1] - vtotal(t)[i-1]) / (2*h)
+    return (vtotal(t+h) - vtotal(t-h)) / (2*h)
 
 
-def du_dr(u, r):
-    return [u[1], (-2/r+0.0001)*u[1] + ]
+def du_dt(u, r):
+    return [u[1], -2/(r+0.00001)*u[1] + dvtotal(u[0])]
+
+
+u0 = [0.55, 0.0001]
+xs = np.linspace(0, 70)
+us = odeint(du_dt, u0, xs)
+ys = us[:,0]
+
+
+pylab.plot(xs, ys)
+pylab.show()
