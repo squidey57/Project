@@ -256,15 +256,7 @@ def hypt(xs):
 
 #pylab.plot(vtotal_1(ys))
 
-#p = int(round(40/125 * k))
-#q = ys[p]
-#q1 = ysp[p]
-#s321 = intrad[0] * ((q1**2)/2 + vtotal(q)[1])/T
 
-#print(s321)
-
-#pylab.plot(t, s32/t)
-#pylab.show()
 #print(ys)
 #pylab.plot(xs, ys)
 #pylab.xlabel('r')

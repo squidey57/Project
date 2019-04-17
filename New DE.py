@@ -6,7 +6,7 @@ from scipy.integrate import odeint
 
 #Critical Temp=0.6175
 
-T = 0.61
+T = 0.6125
 k = 401
 kb = 1
 dofb = 3
@@ -18,7 +18,7 @@ cf = 13.94
 cb = 16*cf
 lam = 1/8
 ms = np.sqrt(lam)
-x = np.linspace(-2, 2, k)
+x = np.linspace(0, 2, k)
 Q = 1
 A = 1/(64*np.pi**2)
 mx = 1
@@ -54,13 +54,12 @@ dm2f = 0.5 * (1 / xd[0]) * ((d2fv1f1 * xd[0]) - (3 * dfv1f1))
 
 #V-tree, pertubative and counter term corrections
 
-
 def v0(x):
     return (-((ms**2)/2)*x**2) + ((lam/4)*(x**4))
 
 
 def vbloop(x):
-    return (((-((ms**2)/2)*x**2) + ((lam/4)*(x**4))) + (A*(dofb*((kb*x)**4))*(np.log(((kb*x)**2)/(Q**2))-1.5)) \
+    return (((-((ms**2)/2)*x**2) + ((lam/4)*(x**4))) + (A*(dofb*((kb*x)**4))*(np.log(((kb*x)**2)/(Q**2))-1.5))\
            + (((dm2b / 2) * x ** 2) + ((dlb / 4) * x ** 4)))
 
 
@@ -93,15 +92,15 @@ def solf(t):
     return actf*(-doff * ((T**4)/(2*np.pi**2)))
 
 
-B = solf(x[201]) + solb(x[201])
+B = solf(x[1]) + solb(x[1])
 
 
 
 def vtotal(t):
     return vtloop(t) + solb(t) + solf(t) - B
 
-#Loop to plot vtotal:
 
+#Loop to plot vtotal:
 
 vtotplot = []
 
@@ -115,16 +114,61 @@ for i in range(0, k):
 def dvtotal(t):
     return (vtotal(t+h) - vtotal(t-h)) / (2*h)
 
+DV = []
+VT = []
+for i in range(0,k):
+    DV.append(dvtotal(x[i]))
+    VT.append(vtotal(x[i]))
+
+pylab.plot(x, DV, label='Diff')
+pylab.plot(x, VT, label='Potential')
+pylab.legend()
+pylab.show()
 
 def du_dt(u, r):
     return [u[1], -2/(r+0.00001)*u[1] + dvtotal(u[0])]
 
 
-u0 = [0.55, 0.0001]
-xs = np.linspace(0, 70)
+u0 = [0.598555, 0.0001]
+xs = np.linspace(0, 100, k)
 us = odeint(du_dt, u0, xs)
 ys = us[:,0]
+ysp = us[:,1]
 
 
 pylab.plot(xs, ys)
 pylab.show()
+
+#Loop to plot vtotal(r):
+
+vtotplotr = []
+
+for i in range(0, k):
+    vtotplotr.append(vtotal(ys[i]))
+
+#Radial integral:
+
+
+def radint(r):
+    return r**2
+
+
+pylab.plot((vtotplotr + ysp**2/2)*radint(xs)*4*np.pi)
+pylab.show()
+
+
+#Integrating the above graph to get s3/T:
+
+s3int = []
+
+for i in range(k):
+    s3int.append((vtotplotr + 0.5 * ysp**2)*radint(xs))
+
+s3 = []
+s3 = np.trapz(s3int, xs)
+
+print(4*np.pi*s3/T)
+
+#When T=0.61, s3/T=104.88 where u0 = 0.61 and runs to xs=70. Probably could be adjusted more.
+#When T=0.6125, s3/T=186.97 where u0=0.598555 and runs to xs=100.
+#Somewhere between these two temperatures is the nucleation temperature which gives an s3/T=135.
