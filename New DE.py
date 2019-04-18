@@ -3,10 +3,12 @@ import scipy as sci
 from scipy import integrate
 import pylab
 from scipy.integrate import odeint
+from scipy import interpolate
+from scipy.interpolate import CubicSpline
 
 #Critical Temp=0.6175
 
-T = 0.6125
+T = 0.61
 k = 401
 kb = 1
 dofb = 3
@@ -120,24 +122,24 @@ for i in range(0,k):
     DV.append(dvtotal(x[i]))
     VT.append(vtotal(x[i]))
 
-pylab.plot(x, DV, label='Diff')
-pylab.plot(x, VT, label='Potential')
-pylab.legend()
-pylab.show()
+#pylab.plot(x, DV, label='Diff')
+#pylab.plot(x, VT, label='Potential')
+#pylab.legend()
+#pylab.show()
 
 def du_dt(u, r):
     return [u[1], -2/(r+0.00001)*u[1] + dvtotal(u[0])]
 
 
-u0 = [0.598555, 0.0001]
-xs = np.linspace(0, 100, k)
+u0 = [0.609772, 0.0001]
+xs = np.linspace(0, 75, k)
 us = odeint(du_dt, u0, xs)
 ys = us[:,0]
 ysp = us[:,1]
 
 
-pylab.plot(xs, ys)
-pylab.show()
+#pylab.plot(xs, ys)
+#pylab.show()
 
 #Loop to plot vtotal(r):
 
@@ -153,8 +155,8 @@ def radint(r):
     return r**2
 
 
-pylab.plot((vtotplotr + ysp**2/2)*radint(xs)*4*np.pi)
-pylab.show()
+#pylab.plot((vtotplotr + ysp**2/2)*radint(xs)*4*np.pi)
+#pylab.show()
 
 
 #Integrating the above graph to get s3/T:
@@ -167,8 +169,20 @@ for i in range(k):
 s3 = []
 s3 = np.trapz(s3int, xs)
 
-print(4*np.pi*s3/T)
+#print(4*np.pi*s3/T)
 
-#When T=0.61, s3/T=104.88 where u0 = 0.61 and runs to xs=70. Probably could be adjusted more.
+#When T=0.61, s3/T=116.6 where u0=0.609772 and xs=75
+#When T=0.6105, s3/T=130.08 where u0=0.60808 and xs=80.
+#When T=0.61075, s3/T=138.02 where u0=0.6071396 and xs=82
+#When T=0.611, s3/T=146.55 where u0=0.606105 and xs=85.
 #When T=0.6125, s3/T=186.97 where u0=0.598555 and runs to xs=100.
-#Somewhere between these two temperatures is the nucleation temperature which gives an s3/T=135.
+
+#Now to interpolate that data!!!
+
+p = [0.61, 0.6105, 0.61075, 0.611, 0.6125]
+q = [116.6, 130.08, 138.02, 146.55, 186.97]
+
+curve = CubicSpline(p, q)
+xs1 = np.linspace(0.61, 0.6125, k)
+pylab.plot(xs1, curve(xs1))
+pylab.show()
