@@ -8,9 +8,9 @@ from scipy.interpolate import CubicSpline
 
 #Critical Temp=0.6175
 
-T = 0.61
+T = 0.596
 k = 401
-kb = 1
+kb = 1.1
 dofb = 3
 nb = 1
 kf = 1
@@ -131,8 +131,8 @@ def du_dt(u, r):
     return [u[1], -2/(r+0.00001)*u[1] + dvtotal(u[0])]
 
 
-u0 = [0.609772, 0.0001]
-xs = np.linspace(0, 75, k)
+u0 = [0.690878, 0.0001]
+xs = np.linspace(0, 57, k)
 us = odeint(du_dt, u0, xs)
 ys = us[:,0]
 ysp = us[:,1]
@@ -155,7 +155,7 @@ def radint(r):
     return r**2
 
 
-#pylab.plot((vtotplotr + ysp**2/2)*radint(xs)*4*np.pi)
+#pylab.plot(xs, (vtotplotr + ysp**2/2)*radint(xs)*4*np.pi)
 #pylab.show()
 
 
@@ -177,12 +177,13 @@ s3 = np.trapz(s3int, xs)
 #When T=0.611, s3/T=146.55 where u0=0.606105 and xs=85.
 #When T=0.6125, s3/T=186.97 where u0=0.598555 and runs to xs=100.
 
-#Now to interpolate that data!!!
 
-p = [0.61, 0.6105, 0.61075, 0.611, 0.6125]
-q = [116.6, 130.08, 138.02, 146.55, 186.97]
+p = [0.59, 0.595, 0.59525, 0.5955, 0.59575, 0.596, 0.6]
+q = [63, 123.42, 128.15, 133.19, 138.45, 144.26, 337.3]
 
 curve = CubicSpline(p, q)
-xs1 = np.linspace(0.61, 0.6125, k)
+xs1 = np.linspace(0.59, 0.6, k)
 pylab.plot(xs1, curve(xs1))
+pylab.show()
+pylab.plot(p, q)
 pylab.show()
