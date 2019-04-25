@@ -5,10 +5,11 @@ import pylab
 from scipy.integrate import odeint
 from scipy import interpolate
 from scipy.interpolate import CubicSpline
+from scipy import misc
 
 #Critical Temp=0.6175
 
-T = 0.596
+T = 0.5955
 k = 401
 kb = 1.1
 dofb = 3
@@ -131,8 +132,8 @@ def du_dt(u, r):
     return [u[1], -2/(r+0.00001)*u[1] + dvtotal(u[0])]
 
 
-u0 = [0.690878, 0.0001]
-xs = np.linspace(0, 57, k)
+u0 = [0.692, 0.0001]
+xs = np.linspace(0, 100, k)
 us = odeint(du_dt, u0, xs)
 ys = us[:,0]
 ysp = us[:,1]
@@ -185,5 +186,9 @@ curve = CubicSpline(p, q)
 xs1 = np.linspace(0.59, 0.6, k)
 pylab.plot(xs1, curve(xs1))
 pylab.show()
-pylab.plot(p, q)
-pylab.show()
+#pylab.plot(p, q)
+#pylab.show()
+nuctemp = sci.misc.derivative(curve, 0.5956, dx=0.001)
+print(nuctemp)
+print(curve(0.5956))
+
