@@ -9,9 +9,9 @@ from scipy import misc
 
 #Critical Temp=0.6175
 
-T = 0.5955
+T = 0.583
 k = 401
-kb = 1.1
+kb = 1.2
 dofb = 3
 nb = 1
 kf = 1
@@ -132,15 +132,15 @@ def du_dt(u, r):
     return [u[1], -2/(r+0.00001)*u[1] + dvtotal(u[0])]
 
 
-u0 = [0.692, 0.0001]
-xs = np.linspace(0, 100, k)
+u0 = [0.7608218, 0.0001]
+xs = np.linspace(0, 44.5, k)
 us = odeint(du_dt, u0, xs)
 ys = us[:,0]
 ysp = us[:,1]
 
 
-#pylab.plot(xs, ys)
-#pylab.show()
+pylab.plot(xs, ys)
+pylab.show()
 
 #Loop to plot vtotal(r):
 
@@ -156,8 +156,8 @@ def radint(r):
     return r**2
 
 
-#pylab.plot(xs, (vtotplotr + ysp**2/2)*radint(xs)*4*np.pi)
-#pylab.show()
+pylab.plot(xs, (vtotplotr + ysp**2/2)*radint(xs)*4*np.pi)
+pylab.show()
 
 
 #Integrating the above graph to get s3/T:
@@ -170,7 +170,7 @@ for i in range(k):
 s3 = []
 s3 = np.trapz(s3int, xs)
 
-#print(4*np.pi*s3/T)
+print(4*np.pi*s3/T)
 
 #When T=0.61, s3/T=116.6 where u0=0.609772 and xs=75
 #When T=0.6105, s3/T=130.08 where u0=0.60808 and xs=80.
@@ -184,11 +184,11 @@ q = [63, 123.42, 128.15, 133.19, 138.45, 144.26, 337.3]
 
 curve = CubicSpline(p, q)
 xs1 = np.linspace(0.59, 0.6, k)
-pylab.plot(xs1, curve(xs1))
-pylab.show()
+#pylab.plot(xs1, curve(xs1))
+#pylab.show()
 #pylab.plot(p, q)
 #pylab.show()
-nuctemp = sci.misc.derivative(curve, 0.5956, dx=0.001)
-print(nuctemp)
-print(curve(0.5956))
+#nuctemp = sci.misc.derivative(curve, 0.5956, dx=0.001)
+#print(nuctemp)
+#print(curve(0.5956))
 
